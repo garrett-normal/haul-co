@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+body {
+    margin: 10ch; /*10 characters of space on each side of the body*/
+}
+
+.main-grid {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(row, minmax(200px, 1fr));
+    justify-content: center;
+    background-color: transparent;
+}
+
+.navlink { 
+    font-family: "Josefin Sans", monospace;
+    text-align: center;
+    vertical-align:middle;
+    text-decoration: none;
+    color: black;
+    background-color: transparent;
+}
+
+.login-form {
+    margin-top: 5ch;
+    display: grid;
+    grid-auto-flow: row;
+    justify-content: center;
+}
+
+/* TEXT FIELDS */
+
+.text-input {
+    font-family: "Josefin Sans", monospace;
+    font-size: 1rem;
+    color: black;
+    background-color: transparent;
+    border: none;
+    padding: 0.5ch 0;
+    margin-bottom: 2ch;
+    width: 30ch;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.text-input::placeholder {
+    color: rgb(0, 0, 0);
+}
+
+.text-input:focus {
+    border-bottom: 2px solid black;
+}
+
+/* BUTTONS */
+.btn {
+    font-family: "Josefin Sans", monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: black;
+    background-color: transparent;
+    border: none;
+    padding: 1ch 3ch;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+    background-color: rgb(171, 171, 171);
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.link {
+    font-family: "Josefin Sans", monospace;
+    padding: none;
+    font-weight: normal;
+}
+
+.link:hover {
+    text-decoration-line: underline;
+}
+
+.horizontal-grid {
+    display: grid;
+    justify-content: left;
+    grid-auto-flow: column;
+}
+
+.spacer-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#comment-field {
+    width: 100%;
+    height: 20ch;
+}
+
+.align-left {
+    display: flex;
+    align-items: left;
+}
+
+.zerba-row:nth-child(even) {
+  background-color: #b8ece1;
+}
+
+h1 {
+    font-family: "Archivo Black", Courier, monospace;
+    font-style: normal;
+    font-size: 3rem; /*thrice the size of the root element*/
+}
+
+h3 {
+    font-family: "Archivo Black", Courier, monospace;
+    font-style: normal;
+}
+
+p {
+    font-family: "Archivo Black", Courier, monospace;
+    font-weight: lighter;
+}
+
+header > * {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-around;
+}
+
+a:visited, a:link {
+    text-decoration: none;
+    color: inherit;
+}
+
+th {
+    padding-left: 2ch;
+    padding-right: 2ch;
+    text-align: left;
+}
+
+tr {
+  border: 1px solid black;
+  text-align: center;
+}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+
+{% block content %} 
+    <div class='main-grid'>
+        <header>
+            <h1>
+                HAUL CO
+            </h1>
+            <p>Vendor Log In</p>
+            <nav>
+                <a class="navlink" href={{url_for('register')}}>Register</a>
+                <a class="navlink" href="">Contact</a>
+            </nav>
+        </header>
+
+        
+        <div class="login-form">
+            {% if form.errors %}
+                {{ form.errors }}
+            {% endif %}
+
+            <form class="login-form" method='post'>
+                {{ form.csrf_token() }}
+
+                {{ form.username(type='text', class="text-input", placeholder='Email', autocomplete='username') }}
+                {{ form.password(type='password', class="text-input", placeholder='Password', autocomplete='password') }}
+
+                <div class="horizontal-grid">
+                    <p>Remember me?</p>
+                    {{ form.remember_me() }}
+                </div>
+                
+                {{ form.submit(class="btn") }}
+
+            </form>
+        </div>
+
+    </div>
+{% endblock content %}

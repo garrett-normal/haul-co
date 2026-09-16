@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <head>
+        <style nonce="{{ csp_nonce() }}">
+            #img {
+                padding-top: 10ch;
+                padding-bottom: 5ch;
+            }
+        </style>
+    </head>
+    <div class='main-grid'>
+        <header>
+            <nav>
+                <a class="navlink link" href={{url_for('dashboard')}}>< Return to Dashboard</a>
+            </nav>
+        </header>
+
+        {% if form.errors %}
+            <ul>
+                {% for key, value in form.errors.items() %}
+                    <li>{{value}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div>
+            {% if form %}
+                <form method='post'>
+                    {{ form.csrf_token() }}
+                    
+                    {{ form.comments(id='comment-field', placeholder='(OPTIONAL) Provide any further instructions that Haul Co. may need to be aware of to ensure a safe and successful delivery.') }}
+                    {{ form.submit(class='btn') }}
+                </form>
+
+            {% elif msg %}
+                <p>{{ msg }}</p>
+            {% else %}
+                <p>Hmm... something is missing.
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

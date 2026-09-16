@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    <div class='main-grid'>
+        <header>
+            <nav>
+                <a class="navlink link" href=>Vendor Support</a>
+                <a class="navlink link" href={{ url_for('ticket_submission') }}>Ticket Submission</a>
+                <a class="navlink link" href={{url_for('logout')}}>Log Out</a>
+            </nav>
+        </header>
+
+        <table>
+            <thead>
+                <h1>
+                    YTD Summary
+                </h1>
+                <p>
+                    {{ current_user.full_name }}
+                </p>
+                <div class="spacer-div">
+                    <a class='link' href="">< 2024</a>
+
+                    <p>2025</p>
+
+                    <a class='link' href="">2026 ></a>
+                </div>
+            </thead>    
+            <tr>
+                <th></th>
+                <th>Total Tonnage</th>
+                <th>Total Trips</th>
+                <th>Avg Payout Per Trip</th>
+                <th>Total Payout</th>
+            </tr>
+            <tr>
+                <th>January</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>February</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>March</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>April</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>May</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>June</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>July</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>August</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>September</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>October</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>November</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+            <tr>
+                <th>December</th>
+                <td>90.33</td>
+                <td>6</td>
+                <td>$198.08</td>
+                <td>$1,198.44</td>
+                <td><a class="link btn" href="">View</a></td>
+            </tr>
+        </table>
+
+        <div>
+            <header class="align-left">
+                <h3>Tickets Under Review</h3>
+            </header>
+            
+            <table>
+                {% for ticket in invalid_tickets %}
+                    <tr>
+                        <th>
+                            {{ ticket.id }}
+                        </th>
+                        <td>
+                            {{ ticket.created_at | datetime_format("%B %m, %Y -- %H:%M") }}
+                        </td>
+                        <td>
+                            By: {{ ticket.owner.full_name }}
+                        </td>
+                        <td>
+                            <a class="link" href=>View</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock content %}
