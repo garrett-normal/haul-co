@@ -7,7 +7,6 @@
             <h1>
                 HAUL CO
             </h1>
-            <p>Vendor Log In</p>
             <nav>
                 <a class="navlink" href={{url_for('register')}}>Register</a>
                 <a class="navlink" href="">Contact</a>
@@ -16,25 +15,48 @@
 
         
         <div class="login-form">
+
+
             {% if form.errors %}
-                {{ form.errors }}
+            <div class="alert alert-warning" role="alert">
+                <ul>
+                    {% for key, value in form.errors.items() %}
+                        <li>{{value}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
             {% endif %}
+
+            <h4>Log In</h4>
 
             <form class="login-form" method='post'>
                 {{ form.csrf_token() }}
 
-                {{ form.username(type='text', class="text-input", placeholder='Email', autocomplete='username') }}
-                {{ form.password(type='password', class="text-input", placeholder='Password', autocomplete='password') }}
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    {{ form.username(type='text', class="form-control", autocomplete='username') }}
+                </div>
 
-                <div class="horizontal-grid">
-                    <p>Remember me?</p>
-                    {{ form.remember_me() }}
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    {{ form.password(type='password', class="form-control", autocomplete='password') }}
                 </div>
                 
-                {{ form.submit(class="btn") }}
+                <div class="form-check mb-3">
+                    {{ form.remember_me(class="form-check-input", id="checkDefault") }}
+                    <label class="form-check-label" for="checkDefault">
+                        Remember me?
+                    </label>
+                </div>
+                
+                {{ form.submit(class="btn btn-primary") }}
+
+                
 
             </form>
         </div>
+
+        
 
     </div>
 {% endblock content %}

@@ -10,7 +10,7 @@
             </nav>
         </header>
 
-        <table>
+        <table class='table'>
             <thead>
                 <h1>
                     YTD Summary
@@ -131,25 +131,49 @@
             </tr>
         </table>
 
+        <div class="modal" id="ticketModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
         <div>
             <header class="align-left">
                 <h3>Tickets Under Review</h3>
             </header>
             
-            <table>
+            <table class='table'>
                 {% for ticket in invalid_tickets %}
                     <tr>
                         <th>
                             {{ ticket.id }}
                         </th>
+                        <th>
+                            {{ ticket.status.value }}
+                        </th>
                         <td>
-                            {{ ticket.created_at | datetime_format("%B %m, %Y -- %H:%M") }}
+                            {{ ticket.created_at | datetime_format("%B %m") }}
                         </td>
+                        <th>
+                            {{ ticket.owner.full_name }}
+                        </th>
                         <td>
-                            By: {{ ticket.owner.full_name }}
-                        </td>
-                        <td>
-                            <a class="link" href=>View</a>
+                            <a class="link" href='' 
+                            data-bs-toggle='modal' 
+                            data-bs-target='#ticketModal'
+                            data-id="{{ ticket.id }}"
+                            data-status="{{ ticket.id }}"
+                            data-date="{{ ticket.created_at | datetime_format("%B %m, %Y -- %H:%M") }}"
+                            >View</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -157,3 +181,5 @@
         </div>
     </div>
 {% endblock content %}
+
+

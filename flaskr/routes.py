@@ -3,7 +3,7 @@ from flaskr import app, db
 
 import sqlalchemy as sqla
 from .forms import LoginForm, RegistrationForm, TicketUploadForm
-from flaskr.models import Ticket, User
+from flaskr.models import Ticket, User, TicketStatus
 from flask import request, redirect
 from flask_login import current_user, login_user, login_required, logout_user
 
@@ -93,6 +93,6 @@ def dashboard():
     if current_user.permission_level > 1:
         return render_template('admin_dashboard.html')
 
-    tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.validated != True)).all()
+    tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.status != TicketStatus.ACCEPTED)).all()
 
     return render_template('vendor_dashboard.html', invalid_tickets=tickets_in_review)

@@ -51,41 +51,13 @@ body {
     border-bottom: 2px solid black;
 }
 
-/* BUTTONS */
-.btn {
-    font-family: "Josefin Sans", monospace;
-    font-size: 1rem;
-    font-weight: 600;
-    color: black;
-    background-color: transparent;
-    border: none;
-    padding: 1ch 3ch;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.btn:hover {
-    background-color: rgb(171, 171, 171);
-}
-
-.btn:active {
-    transform: scale(0.97);
-}
-
 .link {
-    font-family: "Josefin Sans", monospace;
     padding: none;
     font-weight: normal;
 }
 
 .link:hover {
     text-decoration-line: underline;
-}
-
-.horizontal-grid {
-    display: grid;
-    justify-content: left;
-    grid-auto-flow: column;
 }
 
 .spacer-div {
@@ -132,16 +104,4 @@ header > * {
 
 a:visited, a:link {
     text-decoration: none;
-    color: inherit;
-}
-
-th {
-    padding-left: 2ch;
-    padding-right: 2ch;
-    text-align: left;
-}
-
-tr {
-  border: 1px solid black;
-  text-align: center;
 }

@@ -15,19 +15,37 @@
 
         <div class="login-form">
             {% if form.errors %}
-                {{ form.errors }}
+            <div class="alert alert-warning" role="alert">
+                <ul>
+                    {% for key, value in form.errors.items() %}
+                        <li>{{value}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
             {% endif %}
 
+            <h4>Register</h4>
+
             <form class="login-form" method='post'>
+                {{ form.csrf_token() }}
 
-                {{ form.csrf_token }}
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    {{ form.username(type='text', class="form-control", autocomplete='username') }}
+                </div>
 
-                {{ form.username(type='text', class="text-input", placeholder='Email', autocomplete='username') }}
-                {{ form.password(type='password', class="text-input", placeholder='Password', autocomplete='password') }}
-                {{ form.rep_password(type='password', class="text-input", placeholder='Confirm Password', autocomplete='password') }}
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    {{ form.password(type='password', class="form-control", autocomplete='password') }}
+                    <div id="emailHelp" class="form-text">Must be at least 8 characters in length</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Repeat Password</label>
+                    {{ form.rep_password(type='password', class="form-control", autocomplete='password') }}
+                </div>
                 
-                {{ form.submit(class='btn', style='margin-top: 2ch;') }}
-
+                {{ form.submit(class="btn btn-primary") }}
             </form>
         </div>
 

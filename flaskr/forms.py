@@ -7,14 +7,14 @@ from wtforms.validators import DataRequired, ValidationError, Email, Length, Equ
 import wtforms
 
 class LoginForm(FlaskForm):
-    username = StringField("Email", validators=[DataRequired(message="An email is required"), Email()])
+    username = StringField("Email", validators=[DataRequired(message="An email is required"), Email(message='A valid email is required')])
     password = PasswordField("Password", validators=[DataRequired(message="A password is required"), Length(min=8)])
     remember_me = BooleanField("Remember Me")
     # recaptcha = RecaptchaField()
     submit = SubmitField("Sign In")
 
 class RegistrationForm(FlaskForm):
-    username = StringField("Email", validators=[DataRequired(message="A valid email is required"), Email()])
+    username = StringField("Email", validators=[DataRequired(message="A valid email is required"), Email(message='A valid email is required')])
     password = PasswordField("Password", validators=[DataRequired(message="A password is required"), Length(min=8)])
     rep_password = PasswordField("Confirm password", validators=[DataRequired(message="You must confirm your password"), EqualTo('password')])
     # recaptcha = RecaptchaField()

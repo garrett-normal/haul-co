@@ -1,7 +1,8 @@
+import enum
 from typing import Optional, List
 from flaskr import login_manager
 import sqlalchemy.orm as so
-from sqlalchemy import Boolean, String, Integer, ForeignKey
+from sqlalchemy import Boolean, String, Integer, ForeignKey, Enum
 from datetime import datetime, timezone
 from flaskr import db
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -11,7 +12,13 @@ from flask_login import UserMixin
 def load_user(userId):
     return db.session.get(User, int(userId))
 
-class User(UserMixin, db.Model):
+class TicketStatus(enum.Enum):
+    PROCESSING = "Processing"
+    IN_REVIEW = "In review"
+    DECLINED = "Declined"
+    ACCEPTED = "Accepted"
+
+class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     full_name: so.Mapped[str] = so.mapped_column(String(75), default='blank')
     email: so.Mapped[str] = so.mapped_column(unique=True, index=True)
@@ -33,7 +40,7 @@ class User(UserMixin, db.Model):
 
 class Ticket(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
-    validated: so.Mapped[Boolean] = so.mapped_column(Boolean, default=False)
+    status: so.Mapped[TicketStatus] = so.mapped_column(Enum(TicketStatus), default=TicketStatus.PROCESSING)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
     comments: so.Mapped[Optional[str]] = so.mapped_column(String(300))
 
