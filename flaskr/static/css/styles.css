@@ -56,6 +56,8 @@ body {
     font-weight: normal;
 }
 
+
+
 .link:hover {
     text-decoration-line: underline;
 }
@@ -92,9 +94,9 @@ h3 {
 }
 
 p {
-    font-family: "Archivo Black", Courier, monospace;
-    font-weight: lighter;
+    font-family: "Open Sans", Courier, monospace;
 }
+
 
 header > * {
     display: grid;

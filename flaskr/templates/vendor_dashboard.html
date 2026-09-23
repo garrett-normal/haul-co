@@ -135,23 +135,28 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <p>Modal body text goes here.</p>
+                        <p><b>Ticket ID: </b><span id="modal-ticket-id"></span></p>
+                        <p><b>Creation Date: </b><span id="modal-ticket-date"></span></p>
+                        <p><b>Author: </b><span id="modal-ticket-author"></span></p>
+                        <p><b>Status: </b><span id="modal-ticket-status"></span></p>
+                        <label for="modal-comment-field" class="form-label">Comments</label>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" disabled>Unsubmit</button>
                     </div>
                 </div>
             </div>
         </div>
         
 
+        {% if invalid_tickets %}
         <div>
             <header class="align-left">
-                <h3>Tickets Under Review</h3>
+                <h3>Unprocessed Tickets</h3>
             </header>
             
-            <table class='table'>
+            <table class='table tickets'>
                 {% for ticket in invalid_tickets %}
                     <tr>
                         <th>
@@ -161,25 +166,30 @@
                             {{ ticket.status.value }}
                         </th>
                         <td>
-                            {{ ticket.created_at | datetime_format("%B %m") }}
+                            {{ ticket.created_at | datetime_format("%B %d") }}
                         </td>
                         <th>
                             {{ ticket.owner.full_name }}
                         </th>
                         <td>
-                            <a class="link" href='' 
+                            <a class="link ticket-btn" href='' id="{{ ticket.id }}-modal"
                             data-bs-toggle='modal' 
                             data-bs-target='#ticketModal'
                             data-id="{{ ticket.id }}"
-                            data-status="{{ ticket.id }}"
-                            data-date="{{ ticket.created_at | datetime_format("%B %m, %Y -- %H:%M") }}"
+                            data-author="{{ ticket.owner.full_name }}"
+                            data-status="{{ ticket.status.value }}"
+                            data-date="{{ ticket.created_at | datetime_format("%B %d, %Y %H:%M") }}"
+                            data-comments="{{ ticket.comments }}"
                             >View</a>
                         </td>
                     </tr>
                 {% endfor %}
             </table>
         </div>
+        {% endif %}
     </div>
 {% endblock content %}
 
-
+{% block scripts %}
+    <script src="{{url_for('static', filename='js/ticket-modal.js')}}" defer></script>
+{% endblock scripts %}

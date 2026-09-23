@@ -1,8 +1,9 @@
 import enum
 from typing import Optional, List
 from flaskr import login_manager
+import sqlalchemy as sa
 import sqlalchemy.orm as so
-from sqlalchemy import Boolean, String, Integer, ForeignKey, Enum
+from sqlalchemy import Boolean, String, Integer, ForeignKey, Enum, TIMESTAMP
 from datetime import datetime, timezone
 from flaskr import db
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -14,7 +15,7 @@ def load_user(userId):
 
 class TicketStatus(enum.Enum):
     PROCESSING = "Processing"
-    IN_REVIEW = "In review"
+    IN_REVIEW = "Needs Review"
     DECLINED = "Declined"
     ACCEPTED = "Accepted"
 

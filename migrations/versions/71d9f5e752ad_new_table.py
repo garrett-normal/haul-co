@@ -1,8 +1,8 @@
-"""users table
+"""new table
 
-Revision ID: f919f65ef6f8
+Revision ID: 71d9f5e752ad
 Revises: 
-Create Date: 2026-09-15 14:55:02.972789
+Create Date: 2026-09-22 20:15:40.159461
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f919f65ef6f8'
+revision = '71d9f5e752ad'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -34,7 +34,7 @@ def upgrade():
 
     op.create_table('ticket',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('validated', sa.Boolean(), nullable=False),
+    sa.Column('status', sa.Enum('PROCESSING', 'IN_REVIEW', 'DECLINED', 'ACCEPTED', name='ticketstatus'), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('comments', sa.String(length=300), nullable=True),
     sa.Column('owner_id', sa.Integer(), nullable=False),

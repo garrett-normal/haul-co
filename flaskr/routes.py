@@ -1,6 +1,7 @@
 from flask import render_template, url_for
 from flaskr import app, db
 
+from datetime import datetime, timezone
 import sqlalchemy as sqla
 from .forms import LoginForm, RegistrationForm, TicketUploadForm
 from flaskr.models import Ticket, User, TicketStatus
