@@ -3,20 +3,7 @@
 
 {% block content %} 
     <div class='main-grid'>
-        <header>
-            <h1>
-                HAUL CO
-            </h1>
-            <nav>
-                <a class="navlink" href={{url_for('register')}}>Register</a>
-                <a class="navlink" href="">Contact</a>
-            </nav>
-        </header>
-
-        
         <div class="login-form">
-
-
             {% if form.errors %}
             <div class="alert alert-warning" role="alert">
                 <ul>
@@ -27,9 +14,9 @@
             </div>
             {% endif %}
 
-            <h4>Log In</h4>
+            <h4 class='text-center'>Log In</h4>
 
-            <form class="login-form" method='post'>
+            <form class="login-form w-100" method='post'>
                 {{ form.csrf_token() }}
 
                 <div class="mb-3">

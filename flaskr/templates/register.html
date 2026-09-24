@@ -8,8 +8,8 @@
                 HAUL CO
             </h1>
             <nav>
-                <a class="navlink" href={{url_for('login')}}>Log In</a>
-                <a class="navlink" href="">Contact</a>
+                <a class="" href={{url_for('login')}}>Log In</a>
+                <a class="" href="">Contact</a>
             </nav>
         </header>
 
@@ -24,7 +24,7 @@
             </div>
             {% endif %}
 
-            <h4>Register</h4>
+            <h4 class='text-center'>Register</h4>
 
             <form class="login-form" method='post'>
                 {{ form.csrf_token() }}

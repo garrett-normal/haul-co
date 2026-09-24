@@ -19,7 +19,14 @@ def datetime_format(value, format="%H:%M %d-%m-%y"):
 app.jinja_env.filters['datetime_format'] = datetime_format
 
 #talisman security
-Talisman(app, content_security_policy=flask_talisman.GOOGLE_CSP_POLICY, content_security_policy_nonce_in=['style-src'])
+Talisman(app, 
+         content_security_policy= {
+             'default-src': '\'self\'',
+             'style-src': ['\'self\'', 'fonts.googleapis.com', 'https://googleapis.com', 'cdn.jsdelivr.net', '\'unsafe-inline\'', '\'unsafe-hashes\''],
+             'font-src': ['\'self\'', 'fonts.googleapis.com', 'https://fonts.gstatic.com'],
+             'script-src': ['\'self\'', 'cdn.jsdelivr.net']
+         }, 
+         content_security_policy_nonce_in=['\'style-src\''])
 
 #database
 db = SQLAlchemy(app)

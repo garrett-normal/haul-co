@@ -1,24 +1,62 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 
-body {
-    margin: 10ch; /*10 characters of space on each side of the body*/
-}
-
 .main-grid {
     display: grid;
     grid-auto-flow: row;
     grid-template-columns: repeat(row, minmax(200px, 1fr));
     justify-content: center;
     background-color: transparent;
+    margin: 2rem;
 }
 
-.navlink { 
-    font-family: "Josefin Sans", monospace;
-    text-align: center;
-    vertical-align:middle;
-    text-decoration: none;
-    color: black;
+.navigation {
+    display: flex;
+    align-items: stretch;
+    background-color: #0F172A;
+}
+
+.navigation ul {
+    list-style-type: none;
     background-color: transparent;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+    display: flex;
+}
+
+.navigation li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navigation a {
+    display: flex;
+    align-items: center;
+    font-family: Helvetica, sans-serif;
+    text-decoration: none;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+}
+
+.navigation a:hover {
+    background-color: #455273af;
+    color: white;
+    text-decoration: none;
+}
+
+.navigation h4 {
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 0 20px;
+    margin: 0;
+}
+
+.navigation > ul.navigation-right {
+    margin-left: auto;
+    margin-right: 1.5rem;
 }
 
 .login-form {
@@ -84,8 +122,10 @@ body {
 
 h1 {
     font-family: "Archivo Black", Courier, monospace;
-    font-style: normal;
-    font-size: 3rem; /*thrice the size of the root element*/
+}
+
+h4 {
+    font-family: "Archivo Black", Courier, monospace;
 }
 
 h3 {

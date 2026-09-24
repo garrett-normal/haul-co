@@ -1,195 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %} 
-    <div class='main-grid'>
-        <header>
-            <nav>
-                <a class="navlink link" href=>Vendor Support</a>
-                <a class="navlink link" href={{ url_for('ticket_submission') }}>Ticket Submission</a>
-                <a class="navlink link" href={{url_for('logout')}}>Log Out</a>
-            </nav>
-        </header>
+    <div class='page-wrapper'>
+        <main class='page-body'>
+            <div class='container-xl'>
+                <div class="row row-deck row-cards">
+                    <div class="col-4">
+                            <div class="card">
+                            <div nonce class="card-body" style="height: 20rem">
 
-        <table class='table'>
-            <thead>
-                <h1>
-                    YTD Summary
-                </h1>
-                <p>
-                    {{ current_user.full_name }}
-                </p>
-                <div class="spacer-div">
-                    <a class='link' href="">< 2024</a>
-
-                    <p>2025</p>
-
-                    <a class='link' href="">2026 ></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card">
+                            <div class="card-body" style="height: 10rem">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body" style="height: 10rem">
+                                
+                            </div>
+                    </div>
                 </div>
-            </thead>    
-            <tr>
-                <th></th>
-                <th>Total Tonnage</th>
-                <th>Total Trips</th>
-                <th>Avg Payout Per Trip</th>
-                <th>Total Payout</th>
-            </tr>
-            <tr>
-                <th>January</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>February</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>March</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>April</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>May</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>June</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>July</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>August</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>September</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>October</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>November</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-            <tr>
-                <th>December</th>
-                <td>90.33</td>
-                <td>6</td>
-                <td>$198.08</td>
-                <td>$1,198.44</td>
-                <td><a class="link btn" href="">View</a></td>
-            </tr>
-        </table>
-
-        <div class="modal" id="ticketModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <p><b>Ticket ID: </b><span id="modal-ticket-id"></span></p>
-                        <p><b>Creation Date: </b><span id="modal-ticket-date"></span></p>
-                        <p><b>Author: </b><span id="modal-ticket-author"></span></p>
-                        <p><b>Status: </b><span id="modal-ticket-status"></span></p>
-                        <label for="modal-comment-field" class="form-label">Comments</label>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" disabled>Unsubmit</button>
-                    </div>
                 </div>
             </div>
-        </div>
-        
-
-        {% if invalid_tickets %}
-        <div>
-            <header class="align-left">
-                <h3>Unprocessed Tickets</h3>
-            </header>
-            
-            <table class='table tickets'>
-                {% for ticket in invalid_tickets %}
-                    <tr>
-                        <th>
-                            {{ ticket.id }}
-                        </th>
-                        <th>
-                            {{ ticket.status.value }}
-                        </th>
-                        <td>
-                            {{ ticket.created_at | datetime_format("%B %d") }}
-                        </td>
-                        <th>
-                            {{ ticket.owner.full_name }}
-                        </th>
-                        <td>
-                            <a class="link ticket-btn" href='' id="{{ ticket.id }}-modal"
-                            data-bs-toggle='modal' 
-                            data-bs-target='#ticketModal'
-                            data-id="{{ ticket.id }}"
-                            data-author="{{ ticket.owner.full_name }}"
-                            data-status="{{ ticket.status.value }}"
-                            data-date="{{ ticket.created_at | datetime_format("%B %d, %Y %H:%M") }}"
-                            data-comments="{{ ticket.comments }}"
-                            >View</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-        {% endif %}
+        </main>
     </div>
 {% endblock content %}
 
 {% block scripts %}
-    <script src="{{url_for('static', filename='js/ticket-modal.js')}}" defer></script>
+    <script src="{{url_for('static', filename='js/vendor-dashboard.js')}}" defer></script>
 {% endblock scripts %}
