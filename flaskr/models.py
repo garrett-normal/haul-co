@@ -29,6 +29,8 @@ class User(db.Model, UserMixin):
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
 
     tickets: so.Mapped[List["Ticket"]] = so.relationship(back_populates="owner") #owner is column defined in Ticket model
+    vehicles: so.Mapped[List["Vehicle"]] = so.relationship(back_populates="owner") #owner is column defined in Vehicle model
+    #current_vehicle type here
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -46,4 +48,13 @@ class Ticket(db.Model):
     comments: so.Mapped[Optional[str]] = so.mapped_column(String(300))
 
     owner: so.Mapped["User"] = so.relationship(back_populates="tickets") #tickets is column defined in User model
+    owner_id: so.Mapped[int] = so.mapped_column(ForeignKey('user.id'))
+
+class Vehicle(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
+    created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
+    plate: so.Mapped[str] = so.mapped_column(String(10))
+    vin: so.Mapped[str] = so.mapped_column(String(20))
+
+    owner: so.Mapped["User"] = so.relationship(back_populates="vehicles") #vehicles is column defined in User model
     owner_id: so.Mapped[int] = so.mapped_column(ForeignKey('user.id'))

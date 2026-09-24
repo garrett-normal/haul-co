@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 
+:root {
+    --brand-navy: #0F172A;
+    --brand-orange: #f26b1d;
+}
+
 .main-grid {
     display: grid;
     grid-auto-flow: row;
@@ -12,7 +17,7 @@
 .navigation {
     display: flex;
     align-items: stretch;
-    background-color: #0F172A;
+    background-color: var(--brand-navy);
 }
 
 .navigation ul {
@@ -59,14 +64,143 @@
     margin-right: 1.5rem;
 }
 
+/* --- IN-PAGE DASH HEADER (terminal / upload / driver mini) --- */
+
+.dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e6e9ef;
+}
+
+.dash-header .terminal-label {
+    color: #7b8697;
+    font-size: .9rem;
+}
+
+.dash-header .terminal-label b {
+    color: #1f2733;
+}
+
+.driver-mini-name {
+    font-weight: 600;
+    font-size: .85rem;
+    line-height: 1.1;
+    color: #1f2733;
+}
+
+.driver-mini-truck {
+    color: #7b8697;
+    font-size: .75rem;
+}
+
+/* --- BUTTONS --- */
+
+.btn-brand {
+    background-color: var(--brand-orange);
+    border-color: var(--brand-orange);
+    color: white;
+    font-weight: 600;
+}
+
+.btn-brand:hover {
+    background-color: #d95e15;
+    border-color: #d95e15;
+    color: white;
+}
+
+.btn-brand-soft {
+    background-color: #fce9db;
+    border-color: #fce9db;
+    color: var(--brand-orange);
+    font-weight: 600;
+    width: 100%;
+}
+
+.btn-brand-soft:hover {
+    background-color: #f8d9bf;
+    color: var(--brand-orange);
+}
+
+/* --- STAT / JOB CARDS --- */
+
+.stat-card.highlight {
+    border-color: var(--brand-orange) !important;
+}
+
+.stat-icon {
+    background-color: #f4f6f9;
+    border-radius: 6px;
+    padding: .25rem .45rem;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1f2733;
+}
+
+.stat-number small {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #7b8697;
+}
+
+.progress-brand {
+    background-color: var(--brand-orange);
+}
+
+.pay-box {
+    background-color: #fdece0;
+    border-radius: .5rem;
+    padding: 1rem;
+}
+
+.pay-box .pay-label {
+    color: var(--brand-orange);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .03em;
+}
+
+.pay-box .pay-amount {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: .25rem 0;
+}
+
+.tip-box {
+    background-color: var(--brand-navy);
+    color: #dbe1f0;
+    border-radius: .75rem;
+    padding: 1.1rem;
+}
+
+.tip-box h4 {
+    color: white;
+    padding: 0;
+}
+
+.table-thumb {
+    width: 46px;
+    height: 36px;
+    background-color: #ccc;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+/* --- FORMS / GENERAL --- */
+
 .login-form {
     margin-top: 5ch;
     display: grid;
     grid-auto-flow: row;
     justify-content: center;
 }
-
-/* TEXT FIELDS */
 
 .text-input {
     font-family: "Josefin Sans", monospace;
@@ -94,8 +228,6 @@
     font-weight: normal;
 }
 
-
-
 .link:hover {
     text-decoration-line: underline;
 }
@@ -122,6 +254,7 @@
 
 h1 {
     font-family: "Archivo Black", Courier, monospace;
+    font-size: xx-large;
 }
 
 h4 {
@@ -136,7 +269,6 @@ h3 {
 p {
     font-family: "Open Sans", Courier, monospace;
 }
-
 
 header > * {
     display: grid;

@@ -1,35 +1,208 @@
 {% extends "base.html" %}
 
-{% block content %} 
-    <div class='page-wrapper'>
-        <main class='page-body'>
-            <div class='container-xl'>
-                <div class="row row-deck row-cards">
-                    <div class="col-4">
-                            <div class="card">
-                            <div nonce class="card-body" style="height: 20rem">
+{% block content %}
 
-                            </div>
-                        </div>
+<div class="page-wrapper">
+    <div class="container-xl py-4">
+
+        <div class="dash-header">
+            <div class="terminal-label">
+                Terminal:&nbsp;<b> TERMINAL NAME </b>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-brand">
+                    <i class="ti ti-camera me-1"></i> Upload New Ticket
+                </button>
+                <i class="ti ti-bell text-muted fs-4"></i>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="text-end">
+                        <div class="driver-mini-name">{{ current_user.full_name }}</div>
+                        <div class="driver-mini-truck">Truck #13</div>
                     </div>
-                    <div class="col-4">
-                        <div class="card">
-                            <div class="card-body" style="height: 10rem">
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body" style="height: 10rem">
-                                
-                            </div>
-                    </div>
-                </div>
+                    <span class="avatar avatar-rounded" style="background-image: url()"></span>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <h1 class="mb-1">Driver Dispatch Overview</h1>
+        <p class="text-muted mb-4">Keep your digital run-tickets updated to ensure instant invoice processing.</p>
+
+        <div class="row row-cards mb-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between text-muted mb-2">
+                            Today's Trips Completed
+                            <span class="stat-icon"><i class="ti ti-truck"></i></span>
+                        </div>
+                        <div class="stat-number">6 <small>trips</small></div>
+                        <div class="text-muted small mt-1">85.4 Tons Hauled Today</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between text-muted mb-2">
+                            This Week's Uploads
+                            <span class="stat-icon"><i class="ti ti-file-text"></i></span>
+                        </div>
+                        <div class="stat-number">24 <small>tickets</small></div>
+                        <div class="text-muted small mt-1">Target: 30 expected</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card stat-card highlight">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between text-muted mb-2">
+                            Pending Approval
+                            <span class="stat-icon"><i class="ti ti-clock"></i></span>
+                        </div>
+                        <div class="stat-number">3 <small>review</small></div>
+                        <div class="text-muted small mt-1">Awaiting clerk verification</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card stat-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between text-muted mb-2">
+                            Fuel Surcharge Rate
+                            <span class="stat-icon"><i class="ti ti-trending-up"></i></span>
+                        </div>
+                        <div class="stat-number">18.5 <small>%</small></div>
+                        <div class="text-muted small mt-1">DOE National Index base</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center mb-3">
+            <div class="col">
+                <h2 class="h3 mb-0">Currently Active Jobs
+                    <span class="badge bg-secondary-lt ms-2">'{ active_jobs|length }' Assigned</span>
+                </h2>
+            </div>
+            <div class="col-auto">
+                <a href="{ url_for('dispatch_orders') }" class="link">View All Dispatch Orders</a>
+            </div>
+        </div>
+
+        <div class="row row-cards mb-4">
+            {% for job in active_jobs %}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h3 class="mb-1">{ job.name }</h3>
+                            <span class="badge { 'bg-blue-lt' if job.status == 'in_progress' else 'bg-yellow-lt' }">
+                                { job.status_label }
+                            </span>
+                        </div>
+                        <div class="text-muted small mb-1">ID: { job.code } &bull; { job.customer_name }</div>
+                        <div class="text-muted small mb-1"><i class="ti ti-map-pin"></i> { job.site_address }</div>
+                        <div class="text-muted small mb-2">
+                            <i class="ti ti-file-text"></i> Tickets Uploaded:
+                            <b>{ job.tickets_uploaded } / { job.tickets_expected } expected</b>
+                        </div>
+                        <div class="progress mb-3" style="height: 6px;">
+                            <div class="progress-bar progress-brand"
+                                 style="width: { (job.tickets_uploaded / job.tickets_expected * 100)|round }%"
+                                 role="progressbar"></div>
+                        </div>
+                        <button class="btn btn-brand-soft">
+                            <i class="ti ti-camera me-1"></i> Upload Ticket Photo
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row align-items-center mb-3">
+                    <div class="col"><h2 class="h3 mb-0">Recent Ticket Submissions</h2></div>
+                    <div class="col-auto">
+                        <a href="{ url_for('upload_history') }" class="link">View All Upload History</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <table class="table card-table table-vcenter">
+                        <thead>
+                            <tr>
+                                <th>Thumbnail</th>
+                                <th>Job Name</th>
+                                <th>Date &amp; Time</th>
+                                <th>Material</th>
+                                <th>Tonnage</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ticket in recent_tickets %}
+                            <tr>
+                                <td><img class="table-thumb" src="{{ ticket.thumbnail_url }}" alt=""></td>
+                                <td>
+                                    <div class="fw-bold">{{ ticket.job_name }}</div>
+                                    <div class="text-muted small">Ticket #{{ ticket.number }}</div>
+                                </td>
+                                <td>{{ ticket.created_at | datetime_format("%b %d, %I:%M %p") }}</td>
+                                <td>{{ ticket.material }}</td>
+                                <td><b>{{ ticket.tonnage }} Tons</b></td>
+                                <td>
+                                    <span class="badge
+                                        {% if ticket.status.value == 'pending' %}bg-yellow-lt
+                                        {% elif ticket.status.value == 'approved' %}bg-green-lt
+                                        {% else %}bg-red-lt{% endif %}">
+                                        {{ ticket.status.value | upper }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <span class="badge bg-blue-lt mb-2">COMPANY DRIVER</span>
+                        <h3 class="mb-0">{{ current_user.full_name }}</h3>
+                        <p class="text-muted small">{{ current_user.cdl_class }} &bull; {{ current_user.status }}</p>
+                        <hr>
+                        <div class="text-muted small mb-1">Assigned Equipment</div>
+                        <div><i class="ti ti-truck"></i> <b>{ truck.model }</b></div>
+                        <div class="text-muted small">Truck ID: { truck.id } &bull; Plate: { truck.plate }</div>
+                        <hr>
+                        <div class="text-muted small mb-1">Pay Period Earnings</div>
+                        <div class="pay-box">
+                            <div class="pay-label">CURRENT PERIOD ({ pay_period.label })</div>
+                            <div class="pay-amount">${ "%.2f"|format(pay_period.total) }</div>
+                            <div class="text-muted small">Calculated from { pay_period.ticket_count } approved haul-tickets</div>
+                        </div>
+                        <p class="mb-1 mt-2">
+                            <i class="ti ti-currency-dollar"></i>
+                            <a href="{ url_for('earnings_history') }" class="link">View Full Earnings History</a>
+                        </p>
+                        <p class="mb-0">
+                            <i class="ti ti-file-text"></i>
+                            <a href="{ url_for('tax_documents') }" class="link" style="color: inherit;">Tax Documents (1099-NEC)</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <h4><i class="ti ti-help-circle"></i> Hauling Tip</h4>
+                    <p class="mb-0 small">Avoid shadows and bright glare when photographing ticket receipts. Make sure the ticket number and tonnage are fully readable for immediate approval.</p>
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>
 {% endblock content %}
 
 {% block scripts %}
