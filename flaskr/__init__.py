@@ -23,7 +23,7 @@ Talisman(app,
          content_security_policy= {
              'default-src': '\'self\'',
              'style-src': ['\'self\'', 'fonts.googleapis.com', 'https://googleapis.com', 'cdn.jsdelivr.net', '\'unsafe-inline\'', '\'unsafe-hashes\''],
-             'font-src': ['\'self\'', 'fonts.googleapis.com', 'https://fonts.gstatic.com'],
+             'font-src': ['\'self\'', 'fonts.googleapis.com', 'https://fonts.gstatic.com', 'cdn.jsdelivr.net'],
              'script-src': ['\'self\'', 'cdn.jsdelivr.net']
          }, 
          content_security_policy_nonce_in=['\'style-src\''])

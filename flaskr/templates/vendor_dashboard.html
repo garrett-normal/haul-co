@@ -7,7 +7,7 @@
 
         <div class="dash-header">
             <div class="terminal-label">
-                Terminal:&nbsp;<b> TERMINAL NAME </b>
+                Terminal:&nbsp;<b> v1.0b </b>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <button class="btn btn-brand">
@@ -132,7 +132,7 @@
                     <table class="table card-table table-vcenter">
                         <thead>
                             <tr>
-                                <th>Thumbnail</th>
+                                <th></th>
                                 <th>Job Name</th>
                                 <th>Date &amp; Time</th>
                                 <th>Material</th>
@@ -141,21 +141,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for ticket in recent_tickets %}
+                            {% for ticket in tickets_in_review %}
                             <tr>
                                 <td><img class="table-thumb" src="{{ ticket.thumbnail_url }}" alt=""></td>
                                 <td>
                                     <div class="fw-bold">{{ ticket.job_name }}</div>
-                                    <div class="text-muted small">Ticket #{{ ticket.number }}</div>
+                                    <div class="text-muted small">Ticket #{{ ticket.id }}</div>
                                 </td>
                                 <td>{{ ticket.created_at | datetime_format("%b %d, %I:%M %p") }}</td>
                                 <td>{{ ticket.material }}</td>
                                 <td><b>{{ ticket.tonnage }} Tons</b></td>
                                 <td>
                                     <span class="badge
-                                        {% if ticket.status.value == 'pending' %}bg-yellow-lt
-                                        {% elif ticket.status.value == 'approved' %}bg-green-lt
-                                        {% else %}bg-red-lt{% endif %}">
+                                        {% if ticket.status.value == 'Processing' %}bg-lime-lt
+                                        {% elif ticket.status.value == 'Needs Review' %}bg-yellow-lt
+                                        {% elif ticket.status.value == 'Declined' %}bg-red-lt
+                                        {% else %}bg-teal-lt{% endif %}">
                                         {{ ticket.status.value | upper }}
                                     </span>
                                 </td>

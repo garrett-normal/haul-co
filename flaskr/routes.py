@@ -94,6 +94,7 @@ def dashboard():
     if current_user.permission_level > 1:
         return render_template('admin_dashboard.html')
 
-    tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.status != TicketStatus.ACCEPTED)).all()
+    tickets_in_review = db.session.scalars(sqla.select(Ticket))
+                                        #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
 
-    return render_template('vendor_dashboard.html', invalid_tickets=tickets_in_review)
+    return render_template('vendor_dashboard.html', tickets_in_review=tickets_in_review)

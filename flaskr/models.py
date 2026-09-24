@@ -19,6 +19,20 @@ class TicketStatus(enum.Enum):
     DECLINED = "Declined"
     ACCEPTED = "Accepted"
 
+class EmployeeType(enum.Enum):
+    ADMIN = 'Admin'
+    COMPANY_DRIVER = 'Company Driver'
+    CONTRACTED_DRIVER = 'Contracted Driver'
+    THIRD_PARTY = 'Third Party'
+
+class Freight(enum.Enum):
+    AGGREGATE = 'Bulk / Aggregate'
+    FLATBED = 'Flatbed / Equip.'
+    TANKER = 'Liquid'
+    REEFER = 'Reefer'
+    DRY_VAN = 'Enclosed Goods'
+    HEAVY = 'Heavy Haul'
+
 class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     full_name: so.Mapped[str] = so.mapped_column(String(75), default='blank')
