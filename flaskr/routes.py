@@ -107,3 +107,8 @@ def tickets_submitted():
         return redirect(url_for('verify'))
 
     return render_template('tickets_submitted.html')
+
+@app.route('/user-settings')
+@login_required
+def settings():
+    return render_template('settings.html')

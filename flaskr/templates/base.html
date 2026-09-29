@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
+<html data-bs-layout="{% block layout %}{% endblock layout %}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,6 +31,7 @@
             </ul>
             <ul class='navigation-right'>
                 {% if current_user.is_authenticated %}
+                    <li><a class="" href={{url_for('settings')}}>Settings</a></li>
                     <li><a class="" href={{url_for('logout')}}>Log Out</a></li>
                 {% endif %}
             </ul>
