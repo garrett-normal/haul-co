@@ -53,7 +53,7 @@ class User(db.Model, UserMixin):
     email: so.Mapped[str] = so.mapped_column(unique=True, index=True)
     email_verified: so.Mapped[Boolean] = so.mapped_column(Boolean(), default=False)
     password_hash: so.Mapped[str] = so.mapped_column(String(256))
-    permission_level: so.Mapped[int] = so.mapped_column(Integer, default=0)
+    employee_status: so.Mapped[EmployeeType] = so.mapped_column(Enum(EmployeeType), default=EmployeeType.THIRD_PARTY, server_default=EmployeeType.THIRD_PARTY.name)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
 
     tickets: so.Mapped[List["Ticket"]] = so.relationship(back_populates="owner") #owner is column defined in Ticket model

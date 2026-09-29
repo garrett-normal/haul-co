@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html data-bs-layout="{% block layout %}{% endblock layout %}">
+<html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,7 +20,12 @@
 
         {% block head %}{% endblock head %}
     </head>
-    <body>
+
+
+    <body class={% block layout %}{% endblock layout %}>
+
+
+        {% block navigation %}
         <nav class='navigation'>
             <ul>
                 <li><h4>HAUL CO</h4></li>
@@ -36,13 +41,13 @@
                 {% endif %}
             </ul>
         </nav>
+        {% endblock navigation %}
+
+
+
         {%block content%}{% endblock content %}
-
-        
     </body>
-
     {% block scripts %}{% endblock scripts %}
-
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.5.1/dist/libs/apexcharts/dist/apexcharts.min.js"></script>

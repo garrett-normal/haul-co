@@ -108,6 +108,14 @@ def tickets_submitted():
 
     return render_template('tickets_submitted.html')
 
+@app.route('/dashboard/admin')
+@login_required
+def admin_dashboard():
+    if not current_user.email_verified:
+        return redirect(url_for('verify'))
+
+    return render_template('admin_dashboard.html')
+
 @app.route('/user-settings')
 @login_required
 def settings():
