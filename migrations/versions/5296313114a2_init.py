@@ -1,8 +1,8 @@
-"""new table
+"""init
 
-Revision ID: 71d9f5e752ad
+Revision ID: 5296313114a2
 Revises: 
-Create Date: 2026-09-22 20:15:40.159461
+Create Date: 2026-09-29 01:10:15.105884
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '71d9f5e752ad'
+revision = '5296313114a2'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,11 +32,34 @@ def upgrade():
         batch_op.create_index(batch_op.f('ix_user_created_at'), ['created_at'], unique=False)
         batch_op.create_index(batch_op.f('ix_user_email'), ['email'], unique=True)
 
+    op.create_table('vehicle',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('plate', sa.String(length=10), nullable=False),
+    sa.Column('vin', sa.String(length=20), nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
+    with op.batch_alter_table('vehicle', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_vehicle_created_at'), ['created_at'], unique=False)
+
+    op.create_table('job',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('created_by_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['created_by_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    with op.batch_alter_table('job', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_job_created_at'), ['created_at'], unique=False)
+
     op.create_table('ticket',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('status', sa.Enum('PROCESSING', 'IN_REVIEW', 'DECLINED', 'ACCEPTED', name='ticketstatus'), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('status', sa.Enum('PROCESSING', 'IN_REVIEW', 'DECLINED', 'ACCEPTED', name='ticketstatus'), nullable=False),
     sa.Column('comments', sa.String(length=300), nullable=True),
+    sa.Column('order_type', sa.Enum('AGGREGATE', 'FLATBED', 'TANKER', 'REEFER', 'DRY_VAN', 'HEAVY', 'OTHER', name='freight'), server_default='Other', nullable=False),
+    sa.Column('billabe_quantity', sa.Integer(), nullable=False),
+    sa.Column('billable_unit', sa.Enum('TON', 'METRIC_TON', 'CUBIC_YARD', 'CUBIC_METER', 'GALLON', 'LOAD', 'HOUR', 'DAY', 'MILE', 'TON_MILE', 'OTHER', name='billableunit'), server_default='Other', nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -53,6 +76,14 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_ticket_created_at'))
 
     op.drop_table('ticket')
+    with op.batch_alter_table('job', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_job_created_at'))
+
+    op.drop_table('job')
+    with op.batch_alter_table('vehicle', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_vehicle_created_at'))
+
+    op.drop_table('vehicle')
     with op.batch_alter_table('user', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_user_email'))
         batch_op.drop_index(batch_op.f('ix_user_created_at'))

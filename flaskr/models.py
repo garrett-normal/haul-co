@@ -1,9 +1,9 @@
 import enum
-from typing import Optional, List
+from typing import Optional, List, Any
 from flaskr import login_manager
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from sqlalchemy import Boolean, String, Integer, ForeignKey, Enum, TIMESTAMP
+from sqlalchemy import Boolean, String, Integer, ForeignKey, Enum
 from datetime import datetime, timezone
 from flaskr import db
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -32,6 +32,20 @@ class Freight(enum.Enum):
     REEFER = 'Reefer'
     DRY_VAN = 'Enclosed Goods'
     HEAVY = 'Heavy Haul'
+    OTHER = 'Other'
+
+class BillableUnit(enum.Enum):
+    TON = "Tons"
+    METRIC_TON = "Metric Tons"
+    CUBIC_YARD = "Cubic Yards"
+    CUBIC_METER = "Cubic Meters"
+    GALLON = "Gallons"
+    LOAD = "Loads"
+    HOUR = "Hours"
+    DAY = "Days"
+    MILE = "Miles"
+    TON_MILE = "Ton Miles"
+    OTHER = "Other"
 
 class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
@@ -43,7 +57,6 @@ class User(db.Model, UserMixin):
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
 
     tickets: so.Mapped[List["Ticket"]] = so.relationship(back_populates="owner") #owner is column defined in Ticket model
-    vehicles: so.Mapped[List["Vehicle"]] = so.relationship(back_populates="owner") #owner is column defined in Vehicle model
     #current_vehicle type here
 
     def check_password(self, password):
@@ -55,20 +68,31 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User {}>'.format(self.email)
 
+
 class Ticket(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
-    status: so.Mapped[TicketStatus] = so.mapped_column(Enum(TicketStatus), default=TicketStatus.PROCESSING)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
+    status: so.Mapped[TicketStatus] = so.mapped_column(Enum(TicketStatus), default=TicketStatus.PROCESSING)
     comments: so.Mapped[Optional[str]] = so.mapped_column(String(300))
+    
+    # payload: so.Mapped[dict[str, Any]] = so.mapped_column(nullable=True) 
+    order_type: so.Mapped[Freight] = so.mapped_column(Enum(Freight), default=Freight.OTHER, server_default=Freight.OTHER.value)
+    
+    billabe_quantity: so.Mapped[int] = so.mapped_column(default=0) # maybe dont leave a default value for prod
+    billable_unit: so.Mapped[BillableUnit] = so.mapped_column(Enum(BillableUnit), default=BillableUnit.OTHER, server_default=BillableUnit.OTHER.value) # maybe dont leave a default value for prod
 
     owner: so.Mapped["User"] = so.relationship(back_populates="tickets") #tickets is column defined in User model
     owner_id: so.Mapped[int] = so.mapped_column(ForeignKey('user.id'))
+
+class Job(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
+    created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
+    
+    created_by_id: so.Mapped[int] = so.mapped_column(ForeignKey('user.id')) #defines foreign key & column
+    created_by: so.Mapped['User'] = so.relationship() #tells sql what object goes in `created_by_id` column
 
 class Vehicle(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
     plate: so.Mapped[str] = so.mapped_column(String(10))
     vin: so.Mapped[str] = so.mapped_column(String(20))
-
-    owner: so.Mapped["User"] = so.relationship(back_populates="vehicles") #vehicles is column defined in User model
-    owner_id: so.Mapped[int] = so.mapped_column(ForeignKey('user.id'))
