@@ -24,6 +24,7 @@ class EmployeeType(enum.Enum):
     COMPANY_DRIVER = 'Company Driver'
     CONTRACTED_DRIVER = 'Contracted Driver'
     THIRD_PARTY = 'Third Party'
+    OTHER = 'Unassigned'
 
 class Freight(enum.Enum):
     AGGREGATE = 'Bulk / Aggregate'
@@ -51,7 +52,7 @@ class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     full_name: so.Mapped[str] = so.mapped_column(String(75), default='blank')
     email: so.Mapped[str] = so.mapped_column(unique=True, index=True)
-    email_verified: so.Mapped[Boolean] = so.mapped_column(Boolean(), default=False)
+    email_verified: so.Mapped[Boolean] = so.mapped_column(Boolean(), default=True)
     password_hash: so.Mapped[str] = so.mapped_column(String(256))
     employee_status: so.Mapped[EmployeeType] = so.mapped_column(Enum(EmployeeType), default=EmployeeType.THIRD_PARTY, server_default=EmployeeType.THIRD_PARTY.name)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))

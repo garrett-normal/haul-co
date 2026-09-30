@@ -2,10 +2,10 @@ from flask import render_template, url_for
 from flaskr import app, db
 import os
 
-from datetime import datetime, timezone
 import sqlalchemy as sqla
+from sqlalchemy import Boolean
 from .forms import LoginForm, RegistrationForm, TicketUploadForm
-from flaskr.models import Ticket, User, TicketStatus
+from flaskr.models import Ticket, User, EmployeeType
 from flask import request, redirect
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import check_password_hash
@@ -49,7 +49,7 @@ def login():
     return render_template('login.html', form=form)
 
 
-
+#fix for prod, in debug mode
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -57,9 +57,12 @@ def register():
 
     form = RegistrationForm()
     if form.validate_on_submit():
+        print("RUNNING")
         user = User()
         user.email = str(form.username.data)
-        user.set_password(str(form.password.data))
+        user.full_name = 'John Smith'
+        user.set_password('password')
+        user.employee_status = EmployeeType.ADMIN
 
         db.session.add(user)
         db.session.commit()
@@ -113,8 +116,11 @@ def tickets_submitted():
 def admin_dashboard():
     if not current_user.email_verified:
         return redirect(url_for('verify'))
-
-    return render_template('admin_dashboard.html')
+    #hard to explain this
+    #double clause
+    employee_list = db.session.scalars(db.select(User).where(User.id != current_user.id).where(User.employee_status == EmployeeType.ADMIN)).all()
+    mems = db.session.scalars(db.select(User).where(User.id != current_user.id).where(User.employee_status != EmployeeType.ADMIN)).all()
+    return render_template('admin_dashboard.html', employee_list=employee_list, mems=mems)
 
 @app.route('/user-settings')
 @login_required

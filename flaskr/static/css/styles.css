@@ -5,6 +5,11 @@
     --brand-orange: #f26b1d;
 }
 
+.scrollable-card-list {
+    max-height: 18rem;
+    overflow-y: auto;
+}
+
 .main-grid {
     display: grid;
     grid-auto-flow: row;

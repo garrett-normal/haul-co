@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
+<html {% block layout %}{% endblock layout %}>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +14,7 @@
         <link rel='stylesheet' href={{url_for('static', filename='css/bootstrap-css/bootstrap.min.css')}}>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.5.1/dist/css/tabler-vendors.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
         <link rel='stylesheet' href={{url_for('static', filename='css/styles.css')}}>
 
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -22,26 +23,27 @@
     </head>
 
 
-    <body class={% block layout %}{% endblock layout %}>
-
-
-        {% block navigation %}
-        <nav class='navigation'>
-            <ul>
-                <li><h4>HAUL CO</h4></li>
-                {% if not current_user.is_authenticated %}
-                    <li><a class="" href={{url_for('login')}}>Log In</a></li>
-                    <li><a class="" href={{ url_for('register') }}>Register</a></li>
+    <body>
+    {% block navigation %}
+    <nav class='navigation'>
+        <ul>
+            <li><h4>HAUL CO</h4></li>
+            {% if not current_user.is_authenticated %}
+                <li><a href={{url_for('login')}}>Log In</a></li>
+                <li><a href={{ url_for('register') }}>Register</a></li>
+            {% endif %}
+        </ul>
+        <ul class='navigation-right'>
+            {% if current_user.is_authenticated %}
+                {% if current_user.employee_status.value == 'Admin' %}
+                <li><a href={{url_for('admin_dashboard')}}>Manage</a></li>
                 {% endif %}
-            </ul>
-            <ul class='navigation-right'>
-                {% if current_user.is_authenticated %}
-                    <li><a class="" href={{url_for('settings')}}>Settings</a></li>
-                    <li><a class="" href={{url_for('logout')}}>Log Out</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endblock navigation %}
+                <li><a href={{url_for('settings')}}>Settings</a></li>
+                <li><a href={{url_for('logout')}}>Log Out</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endblock navigation %}
 
 
 
@@ -49,7 +51,6 @@
     </body>
     {% block scripts %}{% endblock scripts %}
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js" defer></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.5.1/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="{{ url_for('static', filename='js/bootstrap-js/bootstrap.js') }}"></script>
 </html>
