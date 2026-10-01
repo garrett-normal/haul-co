@@ -36,7 +36,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Team members</h3>
                                 <div class="card-actions">
-                                <a href="" class="btn btn-primary">
+                                <a href="" class="btn btn-brand">
                                     <!-- Download SVG icon from http://tabler.io/icons/icon/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="icon">
                                     <path d="M12 5l0 14" />
@@ -86,7 +86,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Employees</h3>
                                 <div class="card-actions">
-                                <a href="" class="btn btn-primary">
+                                <a href="" class="btn btn-brand">
                                     <!-- Download SVG icon from http://tabler.io/icons/icon/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="icon">
                                     <path d="M12 5l0 14" />
@@ -121,8 +121,9 @@
 
                     <div class="col-4">
                         <div class="card">
-                            <div class="card-body" style="height: 10rem">
-
+                            <div class="card-body">
+                                <h1 class="card-title">Staffed Ratio</h1>
+                                <canvas id="employees-graph-card" class="position-relative"></canvas>
                             </div>
                         </div>
                     </div>
@@ -130,13 +131,9 @@
 
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-body" >
                                 <h1 class="card-title">Ticket Submission Volume</h1>
-                            </div>
-                            <div class="card-body">
-                                <div id="tickets-graph-card" class="position-relative" role="img" aria-label="Ticket Volume">
-
-                                </div>
+                                <canvas id="tickets-graph-card" class="position-relative"></canvas>
                             </div>
                         </div>
                     </div>
@@ -148,5 +145,6 @@
 {% endblock content %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
 <script src="{{url_for('static', filename='js/charts.js')}}" defer></script>
 {% endblock scripts %}

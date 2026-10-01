@@ -36,10 +36,3 @@
 //     document.querySelector('#modal-ticket-status').textContent = btn.dataset.status;
 
 // })
-
-document.addEventListener('DOMContentLoaded', (e) => {
-    new ApexCharts(document.getElementById('chart-revenue'), {
-        chart: { type: 'line', fontFamily: 'inherit', height: 240 },
-        series: [{ name: 'Revenue', data: [37, 45, 32, 58, 41, 63] }],
-    }).render();
-}) 
