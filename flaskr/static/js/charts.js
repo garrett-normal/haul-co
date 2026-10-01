@@ -20,8 +20,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
             },
             options: {
             scales: {
+                x: {
+                    display: true,
+                    text: "Month"
+                },
                 y: {
-                beginAtZero: true
+                    beginAtZero: true,
+                    display: true
                 }
             }
             }

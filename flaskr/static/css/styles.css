@@ -6,7 +6,7 @@
 }
 
 .scrollable-card-list {
-    max-height: 18rem;
+    max-height: 28rem;
     overflow-y: auto;
 }
 

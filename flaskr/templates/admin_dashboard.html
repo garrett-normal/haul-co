@@ -9,7 +9,7 @@
         <div class="navbar-nav flex-row order-md-last">
             <div class="nav-item">
                 <a class="nav-link d-flex lh-1 text-reset p-0">
-                    <span class="avatar avatar-sm" style="background-image: url(/static/avatars/002m.jpg)"></span>
+                    <span class="avatar avatar-sm"></span>
                     <div class="d-none d-xl-block ps-2">
                         <div>{{ current_user.full_name }}</div>
                         <div class="mt-1 small text-secondary">{{ current_user.employee_status.value }}</div>
@@ -38,7 +38,7 @@
                                 <div class="card-actions">
                                 <a href="" class="btn btn-brand">
                                     <!-- Download SVG icon from http://tabler.io/icons/icon/plus -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="icon">
+                                    <svg xmlns="" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="icon">
                                     <path d="M12 5l0 14" />
                                     <path d="M5 12l14 0" />
                                     </svg> Create
@@ -145,6 +145,6 @@
 {% endblock content %}
 
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" defer></script>
 <script src="{{url_for('static', filename='js/charts.js')}}" defer></script>
 {% endblock scripts %}
