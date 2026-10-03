@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: e58badfe8bc5
+Revision ID: f7492e6824a9
 Revises: 
-Create Date: 2026-09-29 18:33:55.619434
+Create Date: 2026-10-03 00:51:43.208234
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e58badfe8bc5'
+revision = 'f7492e6824a9'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,7 @@ def upgrade():
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('email_verified', sa.Boolean(), nullable=False),
     sa.Column('password_hash', sa.String(length=256), nullable=False),
-    sa.Column('employee_status', sa.Enum('ADMIN', 'COMPANY_DRIVER', 'CONTRACTED_DRIVER', 'THIRD_PARTY', name='employeetype'), server_default='THIRD_PARTY', nullable=False),
+    sa.Column('employee_status', sa.Enum('ADMIN', 'COMPANY_DRIVER', 'CONTRACTED_DRIVER', 'THIRD_PARTY', 'OTHER', name='employeetype'), server_default='THIRD_PARTY', nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
@@ -45,8 +45,10 @@ def upgrade():
     op.create_table('job',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('driver_id', sa.Integer(), nullable=False),
     sa.Column('created_by_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['created_by_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['driver_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('job', schema=None) as batch_op:

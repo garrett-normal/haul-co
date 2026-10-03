@@ -82,15 +82,18 @@ class Ticket(db.Model):
     billabe_quantity: so.Mapped[int] = so.mapped_column(default=0) # maybe dont leave a default value for prod
     billable_unit: so.Mapped[BillableUnit] = so.mapped_column(Enum(BillableUnit), default=BillableUnit.OTHER, server_default=BillableUnit.OTHER.value) # maybe dont leave a default value for prod
 
-    owner: so.Mapped["User"] = so.relationship(back_populates="tickets") #tickets is column defined in User model
-    owner_id: so.Mapped[int] = so.mapped_column(ForeignKey('user.id'))
+    owner: so.Mapped["User"] = so.relationship(back_populates="tickets")
+    owner_id: so.Mapped[int] = so.mapped_column(ForeignKey("user.id"))
 
 class Job(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
     
-    created_by_id: so.Mapped[int] = so.mapped_column(ForeignKey('user.id')) #defines foreign key & column
-    created_by: so.Mapped['User'] = so.relationship() #tells sql what object goes in `created_by_id` column
+    driver: so.Mapped["User"] = so.relationship(foreign_keys="Job.driver_id")
+    driver_id: so.Mapped[int] = so.mapped_column(ForeignKey("user.id"))
+
+    created_by: so.Mapped["User"] = so.relationship(foreign_keys="Job.created_by_id")
+    created_by_id: so.Mapped[int] = so.mapped_column(ForeignKey("user.id"))
 
 class Vehicle(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
