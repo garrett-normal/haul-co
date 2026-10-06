@@ -5,7 +5,7 @@ import os
 import sqlalchemy as sqla
 from sqlalchemy import Boolean
 from .forms import LoginForm, RegistrationForm, TicketUploadForm
-from flaskr.models import Ticket, User, EmployeeType
+from flaskr.models import Ticket, User, EmployeeType, Job
 from flask import request, redirect
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import check_password_hash
@@ -98,10 +98,15 @@ def ticket_submission():
 def dashboard():
     if not current_user.email_verified:
         return redirect(url_for('verify'))
-    
-    tickets_in_review = db.session.scalars(sqla.select(Ticket)) #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
 
-    return render_template('vendor_dashboard.html', tickets_in_review=tickets_in_review)
+    #.all() put data into a list
+    tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.owner_id == current_user.id)).all() #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
+    active_jobs = db.session.scalars(sqla.select(Job).where(Job.id == current_user.id)).all()
+
+    print('JOBS ',active_jobs)
+    print('TICKETS ',tickets_in_review)
+
+    return render_template('vendor_dashboard.html', tickets_in_review=tickets_in_review, active_jobs=active_jobs)
 
 @app.route('/dashboard/tickets-submitted')
 @login_required

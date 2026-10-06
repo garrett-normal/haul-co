@@ -19,7 +19,7 @@
                         <div class="driver-mini-name">{{ current_user.full_name }}</div>
                         <div class="driver-mini-truck">Truck #13</div>
                     </div>
-                    <span class="avatar avatar-rounded" style="background-image: url()"></span>
+                    <!--<span class="avatar avatar-rounded"></span>-->
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@
         <div class="row align-items-center mb-3">
             <div class="col">
                 <h2 class="h3 mb-0">Currently Active Jobs
-                    <span class="badge bg-secondary-lt ms-2">'{ active_jobs|length }' Assigned</span>
+                    <span class="badge bg-secondary-lt ms-2">{{ active_jobs|length }} Assigned</span>
                 </h2>
             </div>
             <div class="col-auto">
