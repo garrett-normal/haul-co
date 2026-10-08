@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
         <link rel='stylesheet' href={{url_for('static', filename='css/styles.css')}}>
 
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <!--<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">-->
 
         {% block head %}{% endblock head %}
     </head>
@@ -29,17 +29,17 @@
         <ul>
             <li><h4>HAUL CO</h4></li>
             {% if not current_user.is_authenticated %}
-                <li><a href={{url_for('login')}}>Log In</a></li>
-                <li><a href={{ url_for('register') }}>Register</a></li>
+                <li><a href={{url_for('accounts.login')}}>Log In</a></li>
+                <li><a href={{ url_for('accounts.register') }}>Register</a></li>
             {% endif %}
         </ul>
         <ul class='navigation-right'>
             {% if current_user.is_authenticated %}
                 {% if current_user.employee_status.value == 'Admin' %}
-                <li><a href={{url_for('admin_dashboard')}}>Manage</a></li>
+                <li><a href={{url_for('admin.admin_dashboard')}}>Manage</a></li>
                 {% endif %}
-                <li><a href={{url_for('settings')}}>Settings</a></li>
-                <li><a href={{url_for('logout')}}>Log Out</a></li>
+                <li><a href={{url_for('accounts.settings')}}>Settings</a></li>
+                <li><a href={{url_for('accounts.logout')}}>Log Out</a></li>
             {% endif %}
         </ul>
     </nav>
