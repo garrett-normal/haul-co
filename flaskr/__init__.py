@@ -6,7 +6,6 @@ from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_talisman import Talisman
-import flask_talisman
 
 #main app & config
 app = Flask(__name__)
@@ -40,7 +39,11 @@ login_manager = LoginManager(app)
 # login_manager.login_view = "login" # type: ignore
 @login_manager.unauthorized_handler
 def unauthorized():
-    return "You must be logged in to view this page."
+    return redirect(url_for('login'))
 
-# from app import routes
+#  importing these registers their routes
 from flaskr import forms, routes, models
+from .views import admin#                <---  admin blueprint
+
+#       BLUEPRINT REGISTRATION
+app.register_blueprint(admin.admin)

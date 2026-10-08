@@ -99,6 +99,10 @@ def dashboard():
     if not current_user.email_verified:
         return redirect(url_for('verify'))
 
+    #                                                     [===Admins do not have a driver dashboard===]
+    # if current_user.employee_status == EmployeeType.ADMIN:
+    #     return redirect(url_for('admin.admin_dashboard'))
+
     #.all() put data into a list
     tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.owner_id == current_user.id)).all() #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
     active_jobs = db.session.scalars(sqla.select(Job).where(Job.id == current_user.id)).all()
@@ -115,17 +119,6 @@ def tickets_submitted():
         return redirect(url_for('verify'))
 
     return render_template('tickets_submitted.html')
-
-@app.route('/dashboard/admin')
-@login_required
-def admin_dashboard():
-    if not current_user.email_verified:
-        return redirect(url_for('verify'))
-    #hard to explain this
-    #double clause
-    employee_list = db.session.scalars(db.select(User).where(User.id != current_user.id).where(User.employee_status == EmployeeType.ADMIN)).all()
-    mems = db.session.scalars(db.select(User).where(User.id != current_user.id).where(User.employee_status != EmployeeType.ADMIN)).all()
-    return render_template('admin_dashboard.html', employee_list=employee_list, mems=mems)
 
 @app.route('/user-settings')
 @login_required
