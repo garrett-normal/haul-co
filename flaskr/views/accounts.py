@@ -54,7 +54,7 @@ def login():
 
         #log user in and redirect
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('vendor.dashboard'))
 
     return render_template('accounts/login.html', form=form)
 
