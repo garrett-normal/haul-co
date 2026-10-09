@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+<header class="navbar navbar-expand-sm d-print-none">
+    <div class="container-xl">
+        <h1 class="pe-0 pe-md-3">HAUL CO</h1>
+        <div class="navbar-nav flex-row order-md-last">
+            <div class="nav-item">
+                <a class="nav-link d-flex lh-1 text-reset p-0">
+                    <span class="avatar avatar-sm"></span>
+                    <div class="d-none d-xl-block ps-2">
+                        <div>{{ current_user.full_name }}</div>
+                        <div class="mt-1 small text-secondary">{{ current_user.employee_status.value }}</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock navigation %}
+
+
+<!--
+
+LARGE GRAPH AT TOP OF page
+TABLE that shows 10 jobs max
+    most recent job at the top
+    options to paginate through more jobs in the list
+    (sort by active/inactive)
+
+-->
+{% block content %}
+
+<div class="page">
+    <div class="page-wrapper">
+        <main class="page-body">
+            <div class="container-xl">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                chart goes here
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center pt-5">
+                    <div class="col-6">
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </main>
+    </div>
+</div>
+
+{% endblock content %}
