@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 import sqlalchemy as sqla
 
 from flaskr import db
-from flaskr.models import Ticket, Job
+from flaskr.models import Ticket, Job, EmployeeType
 from flaskr.forms import TicketUploadForm
 
 vendor = Blueprint('vendor', __name__)
@@ -32,15 +32,12 @@ def dashboard():
         return redirect(url_for('accounts.verify'))
 
     #                                                     [===Admins do not have a driver dashboard===]
-    # if current_user.employee_status == EmployeeType.ADMIN:
-    #     return redirect(url_for('admin.admin_dashboard'))
+    if current_user.employee_status == EmployeeType.ADMIN:
+        return redirect(url_for('admin.admin_dashboard'))
 
     #.all() put data into a list
     tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.owner_id == current_user.id)).all() #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
     active_jobs = db.session.scalars(sqla.select(Job).where(Job.id == current_user.id)).all()
-
-    print('JOBS ',active_jobs)
-    print('TICKETS ',tickets_in_review)
 
     return render_template('vendor/vendor_dashboard.html', tickets_in_review=tickets_in_review, active_jobs=active_jobs)
 

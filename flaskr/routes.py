@@ -14,5 +14,5 @@ from werkzeug.security import check_password_hash
 @app.route('/')
 def home():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('vendor.dashboard'))
     return render_template('index.html')
