@@ -10,6 +10,10 @@
     overflow-y: auto;
 }
 
+.resize-none {
+    resize: none;
+}
+
 .main-grid {
     display: grid;
     grid-auto-flow: row;

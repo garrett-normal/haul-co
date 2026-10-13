@@ -25,7 +25,7 @@ def ticket_submission():
 
     return render_template('vendor/upload.html', form=form, msg=msg)
 
-@vendor.route('/dashboard')
+@vendor.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     if not current_user.email_verified:
@@ -35,11 +35,17 @@ def dashboard():
     # if current_user.employee_status == EmployeeType.ADMIN:
     #     return redirect(url_for('admin.admin_dashboard'))
 
+    form = TicketUploadForm()
+    if form.validate_on_submit():
+        pass
+
+
+
     #.all() put data into a list
     tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.owner_id == current_user.id)).all() #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
     active_jobs = db.session.scalars(sqla.select(Job).where(Job.id == current_user.id)).all()
 
-    return render_template('vendor/vendor_dashboard.html', tickets_in_review=tickets_in_review, active_jobs=active_jobs)
+    return render_template('vendor/vendor_dashboard.html', tickets_in_review=tickets_in_review, active_jobs=active_jobs, ticketForm=TicketUploadForm())
 
 @vendor.route('/dashboard/tickets-submitted')
 @login_required

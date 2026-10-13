@@ -26,7 +26,7 @@ class EmployeeType(enum.Enum):
     THIRD_PARTY = 'Third Party'
     OTHER = 'Unassigned'
 
-class Freight(enum.Enum):
+class CargoType(enum.Enum):
     AGGREGATE = 'Bulk / Aggregate'
     FLATBED = 'Flatbed / Equip.'
     TANKER = 'Liquid'
@@ -77,7 +77,7 @@ class Ticket(db.Model):
     comments: so.Mapped[Optional[str]] = so.mapped_column(String(300))
     
     # payload: so.Mapped[dict[str, Any]] = so.mapped_column(nullable=True) 
-    order_type: so.Mapped[Freight] = so.mapped_column(Enum(Freight), default=Freight.OTHER, server_default=Freight.OTHER.value)
+    order_type: so.Mapped[CargoType] = so.mapped_column(Enum(CargoType), default=CargoType.OTHER, server_default=CargoType.OTHER.value)
     
     billabe_quantity: so.Mapped[int] = so.mapped_column(default=0) # maybe dont leave a default value for prod
     billable_unit: so.Mapped[BillableUnit] = so.mapped_column(Enum(BillableUnit), default=BillableUnit.OTHER, server_default=BillableUnit.OTHER.value) # maybe dont leave a default value for prod
