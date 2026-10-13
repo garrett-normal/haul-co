@@ -20,6 +20,10 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                            Create
+                        </a>
+                        <a class="dropdown-item" href="#">
                             Active
                         </a>
                         <a class="dropdown-item" href="#">
@@ -38,7 +42,9 @@
             <li class="nav-item pe-2 ps-2">
                 <a class="nav-link" href="#">
                     <span class="nav-link-title">Ticket Review</span>
-                    <span class="badge bg-red text-red-fg">16</span>
+                    {% if ticket_review_count > 0 %}
+                    <span class="badge bg-red text-red-fg">{{ticket_review_count}}</span>
+                    {% endif %}
                 </a>
             </li>
 

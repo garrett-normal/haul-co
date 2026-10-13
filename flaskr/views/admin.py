@@ -16,7 +16,7 @@ def admin_dashboard():
     #double clause
     employee_list = db.session.scalars(db.select(User).where(User.id != current_user.id).where(User.employee_status == EmployeeType.ADMIN)).all()
     mems = db.session.scalars(db.select(User).where(User.id != current_user.id).where(User.employee_status != EmployeeType.ADMIN)).all()
-    return render_template('admin/admin_dashboard.html', employee_list=employee_list, mems=mems)
+    return render_template('admin/admin_dashboard.html', employee_list=employee_list, mems=mems, ticket_review_count=1)
 
 
 #have a clickable graph on the dashboard that links to the jobs page

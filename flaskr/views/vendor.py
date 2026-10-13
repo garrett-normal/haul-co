@@ -32,8 +32,8 @@ def dashboard():
         return redirect(url_for('accounts.verify'))
 
     #                                                     [===Admins do not have a driver dashboard===]
-    if current_user.employee_status == EmployeeType.ADMIN:
-        return redirect(url_for('admin.admin_dashboard'))
+    # if current_user.employee_status == EmployeeType.ADMIN:
+    #     return redirect(url_for('admin.admin_dashboard'))
 
     #.all() put data into a list
     tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.owner_id == current_user.id)).all() #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
