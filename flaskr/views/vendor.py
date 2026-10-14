@@ -41,7 +41,6 @@ def dashboard():
 @vendor.route('/dashboard/tickets-submitted')
 @login_required
 def tickets_submitted():
-        return redirect(url_for('vendor.dashboard')) #prevent resubmitting everytime the page reloads
     if not current_user.email_verified:
         return redirect(url_for('accounts.verify'))
 
