@@ -59,7 +59,7 @@
                             Pending Approval
                             <span class="stat-icon"><i class="ti ti-clock"></i></span>
                         </div>
-                        <div class="stat-number">3 <small>review</small></div>
+                        <div class="stat-number"> {{ user_tickets|length}} <small>review</small></div>
                         <div class="text-muted small mt-1">Awaiting clerk verification</div>
                     </div>
                 </div>
@@ -141,7 +141,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for ticket in tickets_in_review %}
+                            {% for ticket in user_tickets %}
                             <tr>
                                 <td><img class="table-thumb" src="{{ ticket.thumbnail_url }}" alt=""></td>
                                 <td>
@@ -221,8 +221,10 @@
                         <label class="input-group-text" for="inputGroupFile01">Upload Ticket</label>
                         {{ ticketForm.img(class="form-control", id="inputGroupFile01") }}
                     </div>
-                    <label for="newTicketCommentField" class="form-label">Ticket Type</label>
-                    {{ ticketForm.ticket_type(class="form-select mb-3", id="floatingSelect") }}
+                    <label for="floatingSelectJob" class="form-label">Job Selection</label>
+                    {{ ticketForm.job_select(class="form-select mb-3", id="floatingSelectJob") }}
+                    <label for="floatingSelectType" class="form-label">Ticket Type</label>
+                    {{ ticketForm.ticket_type(class="form-select mb-3", id="floatingSelectType") }}
                     <label for="newTicketCommentField" class="form-label">Special Instructions / Comments</label>
                     {{ ticketForm.comments(class="form-control resize-none", id="newTicketCommentField", rows="3") }}
                 </div>
