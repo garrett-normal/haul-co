@@ -20,10 +20,11 @@ app.jinja_env.filters['datetime_format'] = datetime_format
 #talisman security
 Talisman(app, 
          content_security_policy= {
-             'default-src': ['\'self\'', 'https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js.map'],
+             'default-src': ['\'self\''],
              'style-src': ['\'self\'', 'fonts.googleapis.com', 'https://googleapis.com', 'cdn.jsdelivr.net', '\'unsafe-inline\'', '\'unsafe-hashes\''],
              'font-src': ['\'self\'', 'fonts.googleapis.com', 'https://fonts.gstatic.com', 'cdn.jsdelivr.net'],
-             'script-src': ['\'self\'', 'cdn.jsdelivr.net']
+             'script-src': ['\'self\'', 'https://cdn.jsdelivr.net'],
+             'img-src': ['\'self\'', 'data:']
          }, 
          content_security_policy_nonce_in=['\'style-src\''])
 

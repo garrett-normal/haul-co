@@ -1,7 +1,7 @@
 from flaskr import db
 from flaskr.models import User, CargoType
 import sqlalchemy as sqla
-from flask_wtf import FlaskForm, RecaptchaField
+from flask_wtf import FlaskForm#, RecaptchaField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FileField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, Length, EqualTo
 import wtforms
@@ -28,6 +28,7 @@ class RegistrationForm(FlaskForm):
 
 class TicketUploadForm(FlaskForm):
     img = FileField("Ticket image", validators=[wtforms.validators.regexp(r"^.+\.(jpg|png)$")]) # type: ignore
-    ticket_type = SelectField("Job Type", choices=[(0,'Select ticket type'), (1,'Fuel'), (2,'Scale/Weight'), (3,'Material/Load'), (4, 'Dump/Disposal')]) #change to cargo type
+    job_select = SelectField("Job Selection", choices=[])
+    ticket_type = SelectField("Ticket Type", choices=[(t.name, t.value) for t in CargoType]) 
     comments = TextAreaField("Comments or instructions", validators=[Length(max=300)])
     submit = SubmitField("Submit for review")

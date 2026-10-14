@@ -28,7 +28,7 @@ class EmployeeType(enum.Enum):
 
 class CargoType(enum.Enum):
     AGGREGATE = 'Bulk / Aggregate'
-    FLATBED = 'Flatbed / Equip.'
+    FLATBED = 'Flatbed / Equipment'
     TANKER = 'Liquid'
     REEFER = 'Reefer'
     DRY_VAN = 'Enclosed Goods'
