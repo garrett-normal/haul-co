@@ -3,27 +3,10 @@ from flask_login import login_required, current_user
 import sqlalchemy as sqla
 
 from flaskr import db
-from flaskr.models import Ticket, Job, EmployeeType
+from flaskr.models import Ticket, Job, EmployeeType, BillableUnit, CargoType
 from flaskr.forms import TicketUploadForm
 
 vendor = Blueprint('vendor', __name__)
-
-@vendor.route('/ticket-submission', methods=['GET', 'POST'])
-@login_required
-def ticket_submission():
-    form = TicketUploadForm()
-    msg=None
-
-    if form.validate_on_submit() and current_user:
-        ticket = Ticket()
-        ticket.owner_id = current_user.id
-        ticket.comments = form.comments.data
-        db.session.add(ticket)
-        db.session.commit()
-        form=None
-        msg='Your ticket has been submitted for review.'
-
-    return render_template('vendor/upload.html', form=form, msg=msg)
 
 @vendor.route('/dashboard', methods=['GET', 'POST'])
 @login_required
@@ -37,15 +20,21 @@ def dashboard():
 
     form = TicketUploadForm()
     if form.validate_on_submit():
-        pass
+        ticket = Ticket(
+            comments=form.comments.data,
+            order_type=form.ticket_type.data,
+            billabe_quantity=0,
+            billable_unit=BillableUnit.CUBIC_METER,
+            owner=current_user, # type: ignore
+            owner_id=current_user.id)
 
 
 
     #.all() put data into a list
-    tickets_in_review = db.session.scalars(sqla.select(Ticket).where(Ticket.owner_id == current_user.id)).all() #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
+    user_tickets = db.session.scalars(sqla.select(Ticket).where(Ticket.owner_id == current_user.id)).all() #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
     active_jobs = db.session.scalars(sqla.select(Job).where(Job.id == current_user.id)).all()
 
-    return render_template('vendor/vendor_dashboard.html', tickets_in_review=tickets_in_review, active_jobs=active_jobs, ticketForm=TicketUploadForm())
+    return render_template('vendor/vendor_dashboard.html', user_tickets=user_tickets, active_jobs=active_jobs, ticketForm=TicketUploadForm())
 
 @vendor.route('/dashboard/tickets-submitted')
 @login_required
