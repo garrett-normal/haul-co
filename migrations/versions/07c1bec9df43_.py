@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 6da8e55a52fe
+Revision ID: 07c1bec9df43
 Revises: 
-Create Date: 2026-10-05 20:21:56.133341
+Create Date: 2026-10-14 00:47:53.691810
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6da8e55a52fe'
+revision = '07c1bec9df43'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,6 +44,8 @@ def upgrade():
 
     op.create_table('job',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('title', sa.String(length=300), nullable=False),
+    sa.Column('description', sa.String(length=400), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('driver_id', sa.Integer(), nullable=False),
     sa.Column('created_by_id', sa.Integer(), nullable=False),
@@ -59,7 +61,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('status', sa.Enum('PROCESSING', 'IN_REVIEW', 'DECLINED', 'ACCEPTED', name='ticketstatus'), nullable=False),
     sa.Column('comments', sa.String(length=300), nullable=True),
-    sa.Column('order_type', sa.Enum('AGGREGATE', 'FLATBED', 'TANKER', 'REEFER', 'DRY_VAN', 'HEAVY', 'OTHER', name='freight'), server_default='Other', nullable=False),
+    sa.Column('order_type', sa.Enum('AGGREGATE', 'FLATBED', 'TANKER', 'REEFER', 'DRY_VAN', 'HEAVY', 'OTHER', name='cargotype'), server_default='Other', nullable=False),
     sa.Column('billabe_quantity', sa.Integer(), nullable=False),
     sa.Column('billable_unit', sa.Enum('TON', 'METRIC_TON', 'CUBIC_YARD', 'CUBIC_METER', 'GALLON', 'LOAD', 'HOUR', 'DAY', 'MILE', 'TON_MILE', 'OTHER', name='billableunit'), server_default='Other', nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=False),
