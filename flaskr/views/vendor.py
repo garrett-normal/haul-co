@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 import sqlalchemy as sqla
 
@@ -19,7 +19,7 @@ def dashboard():
     #     return redirect(url_for('admin.admin_dashboard'))
 
     form = TicketUploadForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
         ticket = Ticket(
             comments=form.comments.data,
             order_type=form.ticket_type.data,
@@ -27,18 +27,21 @@ def dashboard():
             billable_unit=BillableUnit.CUBIC_METER,
             owner=current_user, # type: ignore
             owner_id=current_user.id)
+        db.session.add(ticket)
+        db.session.commit()
+        return redirect(url_for('vendor.dashboard')) #prevent resubmitting everytime the page reloads
 
 
 
     #.all() put data into a list
     user_tickets = db.session.scalars(sqla.select(Ticket).where(Ticket.owner_id == current_user.id)).all() #    .where(Ticket.status != TicketStatus.ACCEPTED)).all()
-    active_jobs = db.session.scalars(sqla.select(Job).where(Job.id == current_user.id)).all()
-
+    active_jobs = db.session.scalars(sqla.select(Job).where(Job.driver_id == current_user.id)).all()
     return render_template('vendor/vendor_dashboard.html', user_tickets=user_tickets, active_jobs=active_jobs, ticketForm=TicketUploadForm())
 
 @vendor.route('/dashboard/tickets-submitted')
 @login_required
 def tickets_submitted():
+        return redirect(url_for('vendor.dashboard')) #prevent resubmitting everytime the page reloads
     if not current_user.email_verified:
         return redirect(url_for('accounts.verify'))
 

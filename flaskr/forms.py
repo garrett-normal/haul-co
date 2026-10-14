@@ -48,9 +48,7 @@ class JobCreationForm(FlaskForm):
     driver = SelectField("Driver", choices=[], coerce=int,validators=[DataRequired(message="A driver must be selected.")])
     submit = SubmitField("Create Job")
 
-    print("running form")
     def __init__(self, formdata=_Auto, **kwargs):
-        print("running init")
         super().__init__(formdata, **kwargs)
         drivers = db.session.scalars(sqla.select(User).where(User.employee_status != EmployeeType.ADMIN)).all()
         if drivers.__len__() > 0:
