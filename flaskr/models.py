@@ -74,7 +74,7 @@ class Ticket(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
     status: so.Mapped[TicketStatus] = so.mapped_column(Enum(TicketStatus), default=TicketStatus.PROCESSING)
-    comments: so.Mapped[Optional[str]] = so.mapped_column(String(300))
+    comments: so.Mapped[Optional[str]] = so.mapped_column(String(300), nullable=True)
     
     # payload: so.Mapped[dict[str, Any]] = so.mapped_column(nullable=True) 
     order_type: so.Mapped[CargoType] = so.mapped_column(Enum(CargoType), default=CargoType.OTHER, server_default=CargoType.OTHER.value)
@@ -85,8 +85,20 @@ class Ticket(db.Model):
     owner: so.Mapped["User"] = so.relationship(back_populates="tickets")
     owner_id: so.Mapped[int] = so.mapped_column(ForeignKey("user.id"))
 
+    def __init__(self, comments, order_type: CargoType, billabe_quantity: int, billable_unit: BillableUnit, owner: User, owner_id: int) -> None:
+        super().__init__()
+        self.comments=comments
+        self.order_type=order_type
+        self.billabe_quantity=billabe_quantity
+        self.billable_unit=billable_unit
+        self.owner=owner
+        self.owner_id=owner_id
+
+
 class Job(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
+    title: so.Mapped[str] = so.mapped_column(String(300))
+    description: so.Mapped[Optional[str]] = so.mapped_column(String(400), nullable=True)
     created_at: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
     
     driver: so.Mapped["User"] = so.relationship(foreign_keys="Job.driver_id")
@@ -94,6 +106,19 @@ class Job(db.Model):
 
     created_by: so.Mapped["User"] = so.relationship(foreign_keys="Job.created_by_id")
     created_by_id: so.Mapped[int] = so.mapped_column(ForeignKey("user.id"))
+
+    def __repr__(self) -> str:
+        return self.title
+
+    def __init__(self, title: str, desc: str|None, driver: User, author) -> None:
+        super().__init__()
+        self.title = title
+        self.description = desc
+        self.driver = driver
+        self.driver_id = driver.id
+        self.created_by = author
+        self.created_by_id = author.id
+
 
 class Vehicle(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
