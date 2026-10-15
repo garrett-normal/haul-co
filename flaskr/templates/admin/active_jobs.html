@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+{% block layout %}{% endblock layout %}
+
+{% block navigation %}
+<header class="navbar navbar-expand-sm d-print-none">
+    <div class="container-xl">
+        <h1 class="pe-0 pe-md-3">HAUL CO</h1>
+        <div class="navbar-nav flex-row order-md-last">
+            <li class="nav-item pe-2 ps-2">
+                <a class="nav-link" href="#">
+                    <span class="nav-link-title">Registered Vehicles</span>
+                </a>
+            </li>
+
+            <li class="nav-item pe-2 ps-2">
+                <div class="dropdown">
+                    <a href="#" class="nav-link d-flex active" data-bs-toggle="dropdown">
+                        Jobs
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#job-creation-modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                            Create
+                        </a>
+                        <a class="dropdown-item active" href="{{ url_for('admin.jobs') }}">
+                            Active
+                        </a>
+                        {# TODO: point at the completed jobs page once it exists: url_for('completed_jobs') #}
+                        <a class="dropdown-item" href="#">
+                            Completed
+                        </a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item pe-2 ps-2">
+                <a class="nav-link" href="#">
+                    <span class="nav-link-title">Ticket History</span>
+                </a>
+            </li>
+
+            <li class="nav-item pe-2 ps-2">
+                <a class="nav-link" href="#">
+                    <span class="nav-link-title">Ticket Review</span>
+                    {% if ticket_review_count %}
+                    <span class="badge bg-red text-red-fg">{{ ticket_review_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+
+            <div class="nav-item">
+                <a class="nav-link d-flex lh-1 text-reset pe-2 ps-2" href="#">
+                    <span class="avatar avatar-sm"></span>
+                    <div class="d-none d-xl-block ps-2">
+                        <div>{{ current_user.full_name }}</div>
+                        <div class="mt-1 small text-secondary">{{ current_user.employee_status.value }}</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock navigation %}
+
+
+{% block content %}
+{# status value -> badge color; anything not listed falls back to grey #}
+{% set status_colors = {'in_progress': 'bg-blue-lt', 'on_hold': 'bg-yellow-lt'} %}
+
+<div class="page">
+    <div class="page-wrapper">
+
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">Active jobs</h2>
+                        <div class="text-secondary mt-1">Assign drivers, track ticket activity, and close out finished jobs.</div>
+                    </div>
+                    <div class="col-auto ms-auto">
+                        <div class="btn-list">
+                            {# TODO: url_for('completed_jobs') once that page exists #}
+                            <a href="#" class="btn">Completed jobs</a>
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#job-creation-modal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                                New job
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="page-body">
+            <div class="container-xl">
+                <div class="row row-deck row-cards">
+
+                    <!--FLASH MESSAGES-->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% for category, message in messages %}
+                        <div class="col-12">
+                            <div class="alert alert-{{ category if category in ['success', 'danger', 'warning', 'info'] else 'info' }} alert-dismissible mb-0" role="alert">
+                                {{ message }}
+                                <a class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endwith %}
+
+                    <!--SUMMARY-->
+                    {\% for label, value, color in [
+                        ('Active jobs', stats.active_jobs, ''),
+                        ('Drivers on jobs', stats.drivers_assigned, ''),
+                        ('Tickets submitted', stats.tickets_submitted, ''),
+                        ('Tickets awaiting review', stats.awaiting_review, 'text-red' if stats.awaiting_review else '')
+                    ] %\}
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                            <div class="card-body">
+                                <div class="text-secondary">{{ label }}</div>
+                                <div class="h1 mb-0 {{ color }}">{{ value }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {/% endfor %/}
+
+                    <!--FILTERS-->
+                    <div class="col-12">
+                        <form method="get" class="card">
+                            <div class="card-body">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-md-5">
+                                        <label class="form-label" for="job-search">Search</label>
+                                        <input type="search" id="job-search" name="q" class="form-control" placeholder="Job title" value="{{ filters.q }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="job-driver-filter">Driver</label>
+                                        <select id="job-driver-filter" name="driver" class="form-select">
+                                            <option value="">All drivers</option>
+                                            {% for d in drivers %}
+                                            <option value="{{ d.id }}" {% if filters.driver == d.id %}selected{% endif %}>{{ d.full_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="btn-list flex-nowrap">
+                                            <button type="submit" class="btn btn-primary">Apply filters</button>
+                                            <a href="{{ url_for('active_jobs') }}" class="btn">Clear</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--JOBS TABLE-->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Jobs in progress</h3>
+                                <div class="card-actions text-secondary">{{ pagination.total }} total</div>
+                            </div>
+
+                            {% if jobs %}
+                            <div class="table-responsive">
+                                <table class="table card-table table-vcenter text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Job</th>
+                                            <th>Driver</th>
+                                            <th>Tickets</th>
+                                            <th>Status</th>
+                                            <th>Created</th>
+                                            <th class="w-1"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for job in jobs %}
+                                        <tr>
+                                            <td>
+                                                {# TODO: url_for('job_detail', job_id=job.id) #}
+                                                <a href="#" class="fw-bold text-reset">{{ job.title }}</a>
+                                                <div class="text-secondary text-truncate job-desc-cell">{{ job.description or 'No description' }}</div>
+                                            </td>
+                                            <td>
+                                                {% if job.driver %}
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">{{ job.driver.full_name[:1] }}</span>
+                                                    <div>
+                                                        <div>{{ job.driver.full_name }}</div>
+                                                        <div class="text-secondary small">{{ job.driver.employee_status.value }}</div>
+                                                    </div>
+                                                </div>
+                                                {% else %}
+                                                <span class="text-secondary">No driver assigned</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ job.ticket_count }}
+                                                {% if job.pending_ticket_count %}
+                                                <span class="badge bg-yellow-lt ms-1">{{ job.pending_ticket_count }} to review</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="badge {{ status_colors.get(job.status.value, 'bg-secondary-lt') }}">
+                                                    {{ job.status.value | replace('_', ' ') | capitalize }}
+                                                </span>
+                                            </td>
+                                            <td class="text-secondary">{{ job.created_at | datetime_format("%b %d, %Y") }}</td>
+                                            <td class="text-end">
+                                                <div class="btn-list flex-nowrap justify-content-end">
+                                                    {# TODO: url_for('job_detail', job_id=job.id) #}
+                                                    <a href="#" class="btn btn-sm">View</a>
+                                                    <div class="dropdown">
+                                                        <button type="button" class="btn btn-sm dropdown-toggle dropdown-toggle-split"
+                                                                data-bs-toggle="dropdown"
+                                                                data-bs-popper-config='{"strategy":"fixed"}'
+                                                                aria-label="More actions for {{ job.title }}"></button>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            {# TODO: url_for('edit_job', job_id=job.id) #}
+                                                            <a class="dropdown-item" href="#">Edit details</a>
+                                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reassign-modal-{{ job.id }}">Reassign driver</a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#complete-modal-{{ job.id }}">Mark complete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {% if pagination.pages > 1 %}
+                            {% set args = request.args.to_dict() %}
+                            <div class="card-footer d-flex align-items-center">
+                                <p class="m-0 text-secondary">Page {{ pagination.page }} of {{ pagination.pages }}</p>
+                                <ul class="pagination m-0 ms-auto">
+                                    <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                                        <a class="page-link" href="{{ url_for('active_jobs', **dict(args, page=pagination.prev_num)) if pagination.has_prev else '#' }}">Previous</a>
+                                    </li>
+                                    <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                                        <a class="page-link" href="{{ url_for('active_jobs', **dict(args, page=pagination.next_num)) if pagination.has_next else '#' }}">Next</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            {% endif %}
+
+                            {% else %}
+                            <div class="card-body">
+                                <div class="empty">
+                                    {% if filters.q or filters.driver %}
+                                    <p class="empty-title">No jobs match those filters</p>
+                                    <p class="empty-subtitle text-secondary">Try a different title or driver, or clear the filters.</p>
+                                    <div class="empty-action">
+                                        <a href="{{ url_for('active_jobs') }}" class="btn">Clear filters</a>
+                                    </div>
+                                    {% else %}
+                                    <p class="empty-title">No active jobs</p>
+                                    <p class="empty-subtitle text-secondary">Create a job and assign a driver so tickets have somewhere to go.</p>
+                                    <div class="empty-action">
+                                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#job-creation-modal">New job</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!--PER-JOB MODALS-->
+    {% for job in jobs %}
+    <!--REASSIGN DRIVER-->
+    <div class="modal" id="reassign-modal-{{ job.id }}" tabindex="-1">
+        <form method="post" action="{{ url_for('reassign_job', job_id=job.id) }}">
+            {{ action_form.csrf_token() }}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Reassign driver</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-secondary">{{ job.title }}</p>
+                        <label for="reassign-driver-{{ job.id }}" class="form-label">Driver</label>
+                        <select name="driver_id" id="reassign-driver-{{ job.id }}" class="form-select">
+                            {% for d in drivers %}
+                            <option value="{{ d.id }}" {% if job.driver_id == d.id %}selected{% endif %}>{{ d.full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save driver</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--MARK COMPLETE-->
+    <div class="modal" id="complete-modal-{{ job.id }}" tabindex="-1">
+        <form method="post" action="{{ url_for('complete_job', job_id=job.id) }}">
+            {{ action_form.csrf_token() }}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Mark job complete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ job.title }} will move to Completed jobs.</p>
+                        {% if job.pending_ticket_count %}
+                        <div class="alert alert-warning mb-0" role="alert">
+                            {{ job.pending_ticket_count }} ticket{{ '' if job.pending_ticket_count == 1 else 's' }} on this job still need review.
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Mark complete</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endfor %}
+
+    <!--JOB CREATION MODAL-->
+    <div class="modal" id="job-creation-modal" tabindex="-1">
+        <form id='create-job-form' method="post">
+            {{ new_job_form.csrf_token() }}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New Job</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <label for="floatingSelectJob" class="form-label">Job Title*</label>
+                        {{ new_job_form.title(class="form-control mb-3", id="floatingSelectJob") }}
+                        <label for="floatingSelectDesc" class="form-label">Job Description (400 characters)</label>
+                        {{ new_job_form.description(class="form-control mb-3 resize-none", id="floatingSelectDesc") }}
+                        <label for="floatingSelectDriver" class="form-label">Driver Selection*</label>
+                        {{ new_job_form.driver(class="form-select mb-3", id="floatingSelectDriver") }}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" id="modal-close" data-bs-dismiss="modal">Cancel</button>
+                        {{ new_job_form.submit(class="btn btn-primary") }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

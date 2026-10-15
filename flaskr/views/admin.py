@@ -37,5 +37,5 @@ def admin_dashboard():
 #have a clickable graph on the dashboard that links to the jobs page
 @admin.route('/jobs')
 @login_required
-def job_view_admin():
-    return render_template('admin/admin_jobs_view.html')
+def jobs():
+    return render_template('admin/active_jobs.html')
