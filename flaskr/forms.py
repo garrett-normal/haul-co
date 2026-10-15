@@ -5,7 +5,7 @@ from flaskr.models import User, CargoType, Job, EmployeeType
 from flask_login import current_user
 import sqlalchemy as sqla
 from flask_wtf import FlaskForm#, RecaptchaField
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FileField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FileField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, ValidationError, Email, Length, EqualTo
 import wtforms
 
@@ -45,7 +45,7 @@ class TicketUploadForm(FlaskForm):
 class JobCreationForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired(message="A brief title is required"), Length(min=10, max=80, message="Title must be 10-80 characters.")])
     description = TextAreaField("Description", validators=[Length(max=400, message="No more than 400 characters should be used.")])
-    driver = SelectField("Driver", choices=[], coerce=int,validators=[DataRequired(message="A driver must be selected.")])
+    driver = SelectMultipleField("Driver", choices=[], coerce=int,validators=[DataRequired(message="A driver must be selected.")])
     submit = SubmitField("Create Job")
 
     def __init__(self, formdata=_Auto, **kwargs):
