@@ -225,7 +225,7 @@
                     {{ ticketForm.job_select(class="form-select mb-3", id="floatingSelectJob") }}
                     <label for="floatingSelectType" class="form-label">Ticket Type</label>
                     {{ ticketForm.ticket_type(class="form-select mb-3", id="floatingSelectType") }}
-                    <label for="newTicketCommentField" class="form-label">Special Instructions / Comments</label>
+                    <label for="newTicketCommentField" class="form-label">Special Instructions / Comments (<span id="characterCount">0</span>/300)</label>
                     {{ ticketForm.comments(class="form-control resize-none", id="newTicketCommentField", rows="3") }}
                 </div>
 
@@ -241,4 +241,5 @@
 
 {% block scripts %}
     <script src="{{url_for('static', filename='js/vendor-dashboard.js')}}" defer></script>
+    <script src="{{url_for('static', filename='js/character-count.js')}}" defer></script>
 {% endblock scripts %}
