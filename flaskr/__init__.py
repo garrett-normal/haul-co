@@ -42,7 +42,7 @@ login_manager = LoginManager(app)
 def unauthorized():
     return redirect(url_for('accounts.login'))
 
-#  importing these registers routes, forms, and models with the application
+#  importing these registers routes, forms, and models with the application - nothing above uses them (if imported before, it'd be circular)
 from flaskr import routes#, forms, models
 from .views import admin, accounts, vendor         #    <---------  import file so routes get registered, then access blueprint
 
