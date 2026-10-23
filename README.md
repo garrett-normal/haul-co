@@ -80,8 +80,8 @@ Written by artificial intelligence:
 - ORM foreign relationships
 - OCR ticket review
 
-I've read the SQL-Alchemy documentation quite a few times and I actually appreciate how well documented it is. I often have trouble remembering certain relationships and how they're defined, therefore some of the foriegn key relationships within the database have been curated with the help of Claude.
+I've read the SQL-Alchemy documentation quite a few times and I actually appreciate how nicely documented it is. I often have trouble remembering certain relationships and how they're defined, therefore some of the foriegn key relationships within the database have been curated with the help of Claude.
 
-I essentially tasked Claude with creating the OCR entirely. I originally was going to create it myself, but I don't have too much experience in machine learning. Additionally, most of the machine learning libraries for python are poorly documented and often in written another language other than Enlgish. I'd figured I'd had enough tasked for myself already in terms of the website itself so I've taken what Claude has produced and tailored it to work seamlessly with what I've created so far.
+I essentially tasked Claude with creating the OCR entirely. I originally was going to create it myself, but I don't have too much experience in machine learning. Additionally, most of the machine learning libraries for python are poorly documented and often written in another language other than Enlgish. I'd figured I'd had enough tasked for myself already in terms of the website itself so I've taken what Claude has produced and tailored it to work seamlessly with what I've created so far.
 
 #### *This repository will remain open until I decide otherwise.*
