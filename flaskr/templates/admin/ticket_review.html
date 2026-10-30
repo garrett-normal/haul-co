@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{#
+    TICKET REVIEW
+    Variables this page expects from the route:
+        tickets              - list of Ticket rows waiting for review
+        ticket_review_count  - number shown in the nav badge
+        cargo_types          - CargoType   (the enum, used for the Ticket Type dropdown)
+        billable_units       - BillableUnit (the enum, used for the Unit dropdown)
+
+    Each ticket's form POSTs back to this same page with:
+        ticket_id, order_type, billabe_quantity, billable_unit,
+        decision = "accept" or "decline"
+#}
+
+{% block layout %}{% endblock layout %}
+
+{% block navigation %}
+<nav class="navigation">
+    <ul>
+        <li class="logo">HAUL CO</li>
+        <li><a href="#">Registered Vehicles</a></li>
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Jobs</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ url_for('admin.jobs') }}">Active</a>
+                <a class="dropdown-item" href="#">Completed</a>
+            </div>
+        </li>
+
+        <li><a href="#">Ticket History</a></li>
+
+        <li>
+            {# TODO: url_for('admin.ticket_review') once the route exists #}
+            <a href="#" class="active">
+                Ticket Review
+                {% if ticket_review_count %}
+                <span class="badge text-bg-danger">{{ ticket_review_count }}</span>
+                {% endif %}
+            </a>
+        </li>
+    </ul>
+
+    <ul class="navigation-right">
+        <li class="user-info">
+            {{ current_user.full_name }}
+            <small>{{ current_user.employee_status.value }}</small>
+        </li>
+    </ul>
+</nav>
+{% endblock navigation %}
+
+
+{% block content %}
+{# status value -> badge color; anything not listed falls back to grey #}
+{% set status_colors = {
+    'Processing': 'bg-success-subtle text-success-emphasis',
+    'Needs Review': 'bg-warning-subtle text-warning-emphasis',
+    'Declined': 'bg-danger-subtle text-danger-emphasis',
+    'Accepted': 'bg-info-subtle text-info-emphasis'
+} %}
+
+<main class="container-xl page-content">
+
+    <!--PAGE HEADER-->
+    <div class="mb-4">
+        <h2 class="page-title">Ticket review</h2>
+        <p class="page-subtitle">
+            Check each ticket against its photo, fix anything that was read wrong, then accept or decline it.
+        </p>
+    </div>
+
+    <!--FLASH MESSAGES-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category if category in ['success', 'danger', 'warning', 'info'] else 'info' }} alert-dismissible" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endwith %}
+
+    {% if tickets %}
+    <p class="text-muted">{{ tickets|length }} ticket{{ '' if tickets|length == 1 else 's' }} waiting</p>
+
+    <!--ONE CARD PER TICKET-->
+    {% for ticket in tickets %}
+    <div class="card mb-4" id="ticket-{{ ticket.id }}">
+
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <h3 class="h5 mb-0">Ticket #{{ ticket.id }}</h3>
+            <span class="badge {{ status_colors.get(ticket.status.value, 'bg-secondary-subtle text-secondary-emphasis') }}">
+                {{ ticket.status.value | upper }}
+            </span>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-4">
+
+                <!--LEFT: TICKET PHOTO-->
+                <div class="col-md-5">
+                    {% if ticket.image_url %}
+                    <a href="{{ ticket.image_url }}" target="_blank" rel="noopener">
+                        <img class="ticket-image" src="{{ ticket.image_url }}" alt="Photo of ticket #{{ ticket.id }}">
+                    </a>
+                    <div class="form-text">Click the photo to open it full size.</div>
+                    {% else %}
+                    <div class="ticket-image-placeholder">No photo uploaded</div>
+                    {% endif %}
+                </div>
+
+                <!--RIGHT: DETAILS AND REVIEW FORM-->
+                <div class="col-md-7">
+
+                    <dl class="row mb-3">
+                        <dt class="col-sm-4">Driver</dt>
+                        <dd class="col-sm-8">
+                            {{ ticket.owner.full_name }}
+                            <span class="text-muted">({{ ticket.owner.employee_status.value }})</span>
+                        </dd>
+
+                        <dt class="col-sm-4">Submitted</dt>
+                        <dd class="col-sm-8">{{ ticket.created_at | datetime_format("%b %d, %Y at %I:%M %p") }}</dd>
+
+                        <dt class="col-sm-4">Driver comments</dt>
+                        <dd class="col-sm-8">{{ ticket.comments or 'None' }}</dd>
+                    </dl>
+
+                    <form method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+
+                        <div class="mb-3">
+                            <label for="order-type-{{ ticket.id }}" class="form-label">Ticket type</label>
+                            <select name="order_type" id="order-type-{{ ticket.id }}" class="form-select">
+                                {% for t in cargo_types %}
+                                <option value="{{ t.name }}" {% if ticket.order_type == t %}selected{% endif %}>{{ t.value }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-sm-5">
+                                <label for="quantity-{{ ticket.id }}" class="form-label">Quantity</label>
+                                <input type="number" name="billabe_quantity" id="quantity-{{ ticket.id }}"
+                                       class="form-control" min="0" step="1" value="{{ ticket.billabe_quantity }}">
+                            </div>
+                            <div class="col-sm-7">
+                                <label for="unit-{{ ticket.id }}" class="form-label">Unit</label>
+                                <select name="billable_unit" id="unit-{{ ticket.id }}" class="form-select">
+                                    {% for u in billable_units %}
+                                    <option value="{{ u.name }}" {% if ticket.billable_unit == u %}selected{% endif %}>{{ u.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" name="decision" value="accept" class="btn btn-primary">Accept</button>
+                            <button type="submit" name="decision" value="decline" class="btn btn-outline-danger">Decline</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <!--NOTHING TO REVIEW-->
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <p class="fw-bold mb-1">All caught up</p>
+            <p class="text-muted mb-0">No tickets are waiting for review.</p>
+        </div>
+    </div>
+    {% endif %}
+
+</main>
+{% endblock content %}

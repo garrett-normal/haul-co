@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flaskr import db
-from flaskr.models import User,EmployeeType, Job
+from flaskr.models import User, EmployeeType, Job, Ticket, TicketStatus, CargoType, BillableUnit
 from flaskr.forms import JobCreationForm
 
 from flask_login import login_required, current_user
@@ -39,3 +39,9 @@ def admin_dashboard():
 @login_required
 def jobs():
     return render_template('admin/active_jobs.html')
+
+@admin.route('/ticket-review')
+@login_required
+def ticket_review():
+    tickets = db.session.scalars(db.select(Ticket).where(Ticket.status == TicketStatus.IN_REVIEW)).all()
+    return render_template('admin/ticket_review.html', tickets=tickets, ticket_review_count=tickets.__len__(), cargo_types=CargoType, billable_unit=BillableUnit)
