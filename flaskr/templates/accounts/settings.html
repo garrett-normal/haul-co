@@ -1,22 +1,20 @@
 {% extends 'base.html' %}
 
-{% block layout %}"layout-fluid"{% endblock layout %}
-
 {% block content %}
-<div class="page-wrapper">
-    <div class="mx-auto w-25 mt-3 datagrid">
-        <div class="datagrid-item">
-            <div class="datagrid-title">Full Name</div>
-            <div class="datagrid-content">John Smith</div>
-        </div>
-        <div class="datagrid-item">
-            <div class="datagrid-title">ID</div>
-            <div class="datagrid-content">1</div>
-        </div>
-        <div class="datagrid-item">
-            <div class="datagrid-title">Account Created</div>
-            <div class="datagrid-content">September 1, 2026</div>
+<main class="container page-content">
+    <div class="card narrow-card mx-auto">
+        <div class="card-body">
+            <dl class="mb-0">
+                <dt>Full Name</dt>
+                <dd>John Smith</dd>
+
+                <dt>ID</dt>
+                <dd>1</dd>
+
+                <dt>Account Created</dt>
+                <dd class="mb-0">September 1, 2026</dd>
+            </dl>
         </div>
     </div>
-</div>
+</main>
 {% endblock content %}
