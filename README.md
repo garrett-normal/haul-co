@@ -66,7 +66,7 @@ With this system I hope to have some sort of dashboard to manage and configure e
 | ORM | Flask-SQLAlchemy |
 | Migrations | Flask-Migrate (Alembic) |
 | Database | SQLite (development) |
-| UI | Tabler, Chart.js (loaded from jsDelivr) |
+| UI | Bootstrap 5, Chart.js (loaded from jsDelivr) |
 
 ## Roadmap & Current Progress
 

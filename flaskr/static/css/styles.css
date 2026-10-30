@@ -1,80 +1,309 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+/* =====================================================================
+   HAUL CO STYLES
 
+   This file loads AFTER Bootstrap, so anything written here wins over
+   Bootstrap's own look.
+
+   Want to change colors or fonts? Edit the SETTINGS block just below.
+   Every color and font in this file points back to those settings, so
+   one change there updates the whole site.
+   ===================================================================== */
+
+/* Logo font from Google Fonts. Only the "HAUL CO" logo uses it. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+
+/* ---------------------------------------------------------------------
+   SETTINGS (change these first)
+   --------------------------------------------------------------------- */
 :root {
-    --brand-navy: #0F172A;
-    --brand-orange: #f26b1d;
+    /* Brand colors */
+    --brand-navy: #0F172A;          /* top nav bar, dark boxes */
+    --brand-orange: #f26b1d;        /* main buttons and highlights */
+    --brand-orange-dark: #d95e15;   /* orange when hovered or clicked */
+    --brand-orange-light: #fce9db;  /* soft orange backgrounds */
+
+    /* Text and backgrounds */
+    --text-color: #1f2733;          /* normal writing */
+    --muted-text: #6b7280;          /* grey helper text */
+    --link-color: #c2410c;          /* darker orange so links are easy to read */
+    --page-background: #f7f7f8;     /* behind everything */
+    --nav-hover: #455273af;         /* nav link background on hover */
+
+    /* Fonts */
+    --font-logo: "Archivo Black", Arial, sans-serif;
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
+
+/* ---------------------------------------------------------------------
+   BASICS: text, headings, links
+   --------------------------------------------------------------------- */
+body {
+    font-family: var(--font-body);
+    color: var(--text-color);
+    background-color: var(--page-background);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+a {
+    color: var(--link-color);
+}
+
+a:visited, a:link {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.link {
+    font-weight: normal;
+}
+
+
+/* ---------------------------------------------------------------------
+   TOP NAVIGATION BAR
+   Used by base.html and the admin pages.
+   --------------------------------------------------------------------- */
+.navigation {
+    display: flex;
+    flex-wrap: wrap;            /* links drop to a new line on small screens */
+    align-items: center;
+    background-color: var(--brand-navy);
+    padding: 0 1rem;
+}
+
+.navigation > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Pushes this list to the right side of the bar */
+.navigation > ul.navigation-right {
+    margin-left: auto;
+}
+
+.navigation .logo {
+    font-family: var(--font-logo);
+    font-size: 1.25rem;
+    color: white;
+    margin-right: 1.5rem;
+}
+
+/* The links in the bar */
+.navigation > ul > li > a {
+    display: block;
+    padding: 15px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navigation > ul > li > a:hover {
+    background-color: var(--nav-hover);
+    color: white;
+    text-decoration: none;
+}
+
+/* The page you are on gets an orange line under it */
+.navigation > ul > li > a.active {
+    box-shadow: inset 0 -3px 0 var(--brand-orange);
+}
+
+/* Logged-in user's name and role, on the right */
+.navigation .user-info {
+    color: white;
+    padding: 0 15px;
+    line-height: 1.2;
+}
+
+.navigation .user-info small {
+    display: block;
+    color: #cbd5e1;
+}
+
+/* Highlighted item inside a dropdown menu */
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: var(--brand-orange);
+    color: white;
+}
+
+
+/* ---------------------------------------------------------------------
+   PAGE LAYOUT
+   --------------------------------------------------------------------- */
+/* Space above and below the main content of a page */
+.page-content {
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+}
+
+.page-title {
+    font-size: 1.6rem;
+    margin: 0;
+}
+
+.page-subtitle {
+    color: var(--muted-text);
+    margin: 0.25rem 0 0;
+}
+
+/* A card that stays narrow, for short info like account settings */
+.narrow-card {
+    max-width: 28rem;
+}
+
+
+/* ---------------------------------------------------------------------
+   BUTTONS
+   Bootstrap buttons read their colors from the --bs-btn-* settings,
+   so we point those at our brand colors.
+   --------------------------------------------------------------------- */
+.btn-primary,
+.btn-brand {
+    --bs-btn-color: white;
+    --bs-btn-bg: var(--brand-orange);
+    --bs-btn-border-color: var(--brand-orange);
+    --bs-btn-hover-color: white;
+    --bs-btn-hover-bg: var(--brand-orange-dark);
+    --bs-btn-hover-border-color: var(--brand-orange-dark);
+    --bs-btn-active-color: white;
+    --bs-btn-active-bg: var(--brand-orange-dark);
+    --bs-btn-active-border-color: var(--brand-orange-dark);
+    --bs-btn-disabled-bg: var(--brand-orange);
+    --bs-btn-disabled-border-color: var(--brand-orange);
+    background-image: none;     /* removes the Spacelab theme's blue gradient */
+    font-weight: 600;
+}
+
+/* Spacelab adds its gradient back on hover, so remove it there too */
+.btn-primary:not(.disabled):hover {
+    background-image: none;
+}
+
+/* Light orange button (vendor dashboard job cards) */
+.btn-brand-soft {
+    --bs-btn-color: var(--link-color);
+    --bs-btn-bg: var(--brand-orange-light);
+    --bs-btn-border-color: var(--brand-orange-light);
+    --bs-btn-hover-color: var(--link-color);
+    --bs-btn-hover-bg: #f8d9bf;
+    --bs-btn-hover-border-color: #f8d9bf;
+    font-weight: 600;
+    width: 100%;
+}
+
+
+/* ---------------------------------------------------------------------
+   TABLES AND LISTS
+   --------------------------------------------------------------------- */
+.table thead th {
+    color: var(--muted-text);
+    font-weight: 600;
+}
+
+/* Lets long job descriptions get cut off with "..." */
+.job-desc-cell {
+    max-width: 320px;
+}
+
+/* A list that scrolls instead of growing forever */
 .scrollable-card-list {
     max-height: 28rem;
     overflow-y: auto;
 }
 
+/* Small ticket photo in a table row */
+.table-thumb {
+    width: 46px;
+    height: 36px;
+    background-color: #ccc;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+
+/* ---------------------------------------------------------------------
+   FORMS
+   --------------------------------------------------------------------- */
+/* Stops a text box from being dragged bigger */
 .resize-none {
     resize: none;
 }
 
+
+/* ---------------------------------------------------------------------
+   LOGIN AND REGISTER PAGES
+   --------------------------------------------------------------------- */
 .main-grid {
     display: grid;
     grid-auto-flow: row;
-    grid-template-columns: repeat(row, minmax(200px, 1fr));
     justify-content: center;
-    background-color: transparent;
     margin: 2rem;
 }
 
-.navigation {
-    display: flex;
-    align-items: stretch;
-    background-color: var(--brand-navy);
+.main-grid > header > * {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-around;
 }
 
-.navigation ul {
-    list-style-type: none;
-    background-color: transparent;
-    padding: 0px;
-    margin: 0px;
-    overflow: hidden;
-    display: flex;
+.main-grid h1 {
+    font-family: var(--font-logo);
 }
 
-.navigation li {
-    display: flex;
+.login-form {
+    margin-top: 5ch;
+    display: grid;
+    grid-auto-flow: row;
     justify-content: center;
-    align-items: center;
 }
 
-.navigation a {
+
+/* ---------------------------------------------------------------------
+   TICKET REVIEW PAGE (admin)
+   --------------------------------------------------------------------- */
+/* The ticket photo. max-height keeps tall photos from taking over the page. */
+.ticket-image {
+    display: block;
+    width: 100%;
+    max-height: 32rem;
+    object-fit: contain;
+    background-color: #eceef1;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+}
+
+/* Grey box shown when a ticket has no photo */
+.ticket-image-placeholder {
     display: flex;
     align-items: center;
-    font-family: Helvetica, sans-serif;
-    text-decoration: none;
-    color: white;
-    padding: 15px;
-    font-weight: bold;
+    justify-content: center;
+    height: 16rem;
+    color: var(--muted-text);
+    background-color: #eceef1;
+    border: 1px dashed #c4c9d0;
+    border-radius: 0.375rem;
 }
 
-.navigation a:hover {
-    background-color: #455273af;
-    color: white;
-    text-decoration: none;
-}
 
-.navigation h4 {
-    display: flex;
-    align-items: center;
-    color: white;
-    padding: 0 20px;
-    margin: 0;
-}
-
-.navigation > ul.navigation-right {
-    margin-left: auto;
-    margin-right: 1.5rem;
-}
-
-/* --- IN-PAGE DASH HEADER (terminal / upload / driver mini) --- */
-
+/* ---------------------------------------------------------------------
+   VENDOR (DRIVER) DASHBOARD
+   --------------------------------------------------------------------- */
+/* Strip across the top: version label, upload button, driver name */
 .dash-header {
     display: flex;
     justify-content: space-between;
@@ -87,211 +316,68 @@
 }
 
 .dash-header .terminal-label {
-    color: #7b8697;
-    font-size: .9rem;
-}
-
-.dash-header .terminal-label b {
-    color: #1f2733;
+    color: var(--muted-text);
+    font-size: 0.9rem;
 }
 
 .driver-mini-name {
     font-weight: 600;
-    font-size: .85rem;
+    font-size: 0.85rem;
     line-height: 1.1;
-    color: #1f2733;
 }
 
 .driver-mini-truck {
-    color: #7b8697;
-    font-size: .75rem;
+    color: var(--muted-text);
+    font-size: 0.75rem;
 }
 
-/* --- BUTTONS --- */
-
-.btn-brand {
-
-    background: var(--brand-orange);
-    border-color: var(--brand-orange);
-    color: #fff;
-    border-radius: 6px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25),
-                0 1px 2px rgba(0, 0, 0, 0.15);
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: filter 0.15s ease, transform 0.05s ease;
-    font-weight: 600;
-}
-
-.btn-brand:hover {
-    background-color: #d95e15;
-    border-color: #d95e15;
-    color: white;
-}
-
-.btn-brand-soft {
-    background-color: #fce9db;
-    border-color: #fce9db;
-    color: var(--brand-orange);
-    font-weight: 600;
-    width: 100%;
-}
-
-.btn-brand-soft:hover {
-    background-color: #f8d9bf;
-    color: var(--brand-orange);
-}
-
-/* --- STAT / JOB CARDS --- */
-
+/* The four number boxes */
 .stat-card.highlight {
-    border-color: var(--brand-orange) !important;
-}
-
-.stat-icon {
-    background-color: #f4f6f9;
-    border-radius: 6px;
-    padding: .25rem .45rem;
+    border-color: var(--brand-orange);
 }
 
 .stat-number {
     font-size: 2rem;
     font-weight: 800;
-    color: #1f2733;
 }
 
 .stat-number small {
     font-size: 1.05rem;
     font-weight: 600;
-    color: #7b8697;
+    color: var(--muted-text);
 }
 
 .progress-brand {
     background-color: var(--brand-orange);
 }
 
+/* Earnings box */
 .pay-box {
-    background-color: #fdece0;
-    border-radius: .5rem;
+    background-color: var(--brand-orange-light);
+    border-radius: 0.5rem;
     padding: 1rem;
 }
 
 .pay-box .pay-label {
-    color: var(--brand-orange);
-    font-size: .7rem;
+    color: var(--link-color);
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: .03em;
 }
 
 .pay-box .pay-amount {
     font-size: 1.6rem;
     font-weight: 800;
-    margin: .25rem 0;
+    margin: 0.25rem 0;
 }
 
+/* Dark "Hauling Tip" box */
 .tip-box {
     background-color: var(--brand-navy);
     color: #dbe1f0;
-    border-radius: .75rem;
-    padding: 1.1rem;
+    border-radius: 0.5rem;
+    padding: 1rem;
 }
 
 .tip-box h4 {
     color: white;
-    padding: 0;
-}
-
-.table-thumb {
-    width: 46px;
-    height: 36px;
-    background-color: #ccc;
-    border-radius: 4px;
-    object-fit: cover;
-}
-
-/* --- FORMS / GENERAL --- */
-
-.login-form {
-    margin-top: 5ch;
-    display: grid;
-    grid-auto-flow: row;
-    justify-content: center;
-}
-
-.text-input {
-    font-family: "Josefin Sans", monospace;
-    font-size: 1rem;
-    color: black;
-    background-color: transparent;
-    border: none;
-    padding: 0.5ch 0;
-    margin-bottom: 2ch;
-    width: 30ch;
-    outline: none;
-    transition: border-color 0.2s ease;
-}
-
-.text-input::placeholder {
-    color: rgb(0, 0, 0);
-}
-
-.text-input:focus {
-    border-bottom: 2px solid black;
-}
-
-.link {
-    padding: none;
-    font-weight: normal;
-}
-
-.link:hover {
-    text-decoration-line: underline;
-}
-
-.spacer-div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#comment-field {
-    width: 100%;
-    height: 20ch;
-}
-
-.align-left {
-    display: flex;
-    align-items: left;
-}
-
-.zerba-row:nth-child(even) {
-  background-color: #b8ece1;
-}
-
-h1 {
-    font-family: "Archivo Black", Courier, monospace;
-    font-size: xx-large;
-}
-
-h4 {
-    font-family: "Archivo Black", Courier, monospace;
-}
-
-h3 {
-    font-family: "Archivo Black", Courier, monospace;
-    font-style: normal;
-}
-
-p {
-    font-family: "Open Sans", Courier, monospace;
-}
-
-header > * {
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: space-around;
-}
-
-a:visited, a:link {
-    text-decoration: none;
 }
