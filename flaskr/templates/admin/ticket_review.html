@@ -1,58 +1,12 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 
-{#
-    TICKET REVIEW
-    Variables this page expects from the route:
-        tickets              - list of Ticket rows waiting for review
-        ticket_review_count  - number shown in the nav badge
-        cargo_types          - CargoType   (the enum, used for the Ticket Type dropdown)
-        billable_units       - BillableUnit (the enum, used for the Unit dropdown)
-
-    Each ticket's form POSTs back to this same page with:
+{#  Each ticket's form POSTs back to this same page with:
         ticket_id, order_type, billabe_quantity, billable_unit,
         decision = "accept" or "decline"
 #}
 
-{% block layout %}{% endblock layout %}
 
-{% block navigation %}
-<nav class="navigation">
-    <ul>
-        <li class="logo">HAUL CO</li>
-        <li><a href="#">Registered Vehicles</a></li>
-
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Jobs</a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ url_for('admin.jobs') }}">Active</a>
-                <a class="dropdown-item" href="#">Completed</a>
-            </div>
-        </li>
-
-        <li><a href="#">Ticket History</a></li>
-
-        <li>
-            {# TODO: url_for('admin.ticket_review') once the route exists #}
-            <a href="#" class="active">
-                Ticket Review
-                {% if ticket_review_count %}
-                <span class="badge text-bg-danger">{{ ticket_review_count }}</span>
-                {% endif %}
-            </a>
-        </li>
-    </ul>
-
-    <ul class="navigation-right">
-        <li class="user-info">
-            {{ current_user.full_name }}
-            <small>{{ current_user.employee_status.value }}</small>
-        </li>
-    </ul>
-</nav>
-{% endblock navigation %}
-
-
-{% block content %}
+{% block mid_content %}
 {# status value -> badge color; anything not listed falls back to grey #}
 {% set status_colors = {
     'Processing': 'bg-success-subtle text-success-emphasis',
@@ -179,4 +133,4 @@
     {% endif %}
 
 </main>
-{% endblock content %}
+{% endblock mid_content %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% block mid_head %}{% endblock mid_head %}
+{% endblock head %}
+
+{% block navigation %}
+<nav class="navigation">
+    <ul>
+        <li class="logo">
+            <a href="{{url_for('admin.admin_dashboard')}}">HAUL CO</a>
+        </li>
+        
+        <li><a href="#">Registered Vehicles</a></li>
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Jobs</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#job-creation-modal">+ Create</a>
+                <a class="dropdown-item" href="{{url_for('admin.jobs')}}">Active</a>
+                <a class="dropdown-item" href="#">Completed</a>
+            </div>
+        </li>
+
+        <li><a href="#">Ticket History</a></li>
+
+        <li>
+            <a href="{{url_for('admin.ticket_review')}}">
+                Ticket Review
+                {% if ticket_review_count > 0 %}
+                <span class="badge text-bg-danger">{{ticket_review_count}}</span>
+                {% endif %}
+            </a>
+        </li>
+    </ul>
+
+    <ul class="navigation-right">
+        <li class="user-info">
+            {{ current_user.full_name }}
+            <small>{{ current_user.employee_status.value }}</small>
+        </li>
+    </ul>
+</nav>
+{% endblock navigation %}
+    
+{%block content%}
+    {% block mid_content %}{% endblock mid_content %}
+{% endblock content %}
+
+{% block scripts %}
+    {% block mid_scripts %}{% endblock mid_scripts %}
+{% endblock scripts %}

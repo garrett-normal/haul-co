@@ -1,5 +1,5 @@
     <!DOCTYPE html>
-<html lang="en" {% block layout %}{% endblock layout %}>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,7 +20,7 @@
     {% block navigation %}
     <nav class='navigation'>
         <ul>
-            <li class="logo">HAUL CO</li>
+            <li class="logo">HAUL COHAUL COHAUL CO</li>
             {% if not current_user.is_authenticated %}
                 <li><a href={{url_for('accounts.login')}}>Log In</a></li>
                 <li><a href={{ url_for('accounts.register') }}>Register</a></li>
@@ -38,7 +38,7 @@
     </nav>
     {% endblock navigation %}
 
-        {%block content%}{% endblock content %}
+    {%block content%}{% endblock content %}
 
     {% block scripts %}{% endblock scripts %}
     <!-- Bootstrap's JavaScript (runs dropdowns and pop-up modals) -->

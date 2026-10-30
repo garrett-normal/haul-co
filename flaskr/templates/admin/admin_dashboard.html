@@ -1,46 +1,6 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 
-{% block layout %}{% endblock layout %}
-
-{% block navigation %}
-<nav class="navigation">
-    <ul>
-        <li class="logo">HAUL CO</li>
-        <li><a href="#">Registered Vehicles</a></li>
-
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Jobs</a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#job-creation-modal">+ Create</a>
-                <a class="dropdown-item" href="{{url_for('admin.jobs')}}">Active</a>
-                <a class="dropdown-item" href="#">Completed</a>
-            </div>
-        </li>
-
-        <li><a href="#">Ticket History</a></li>
-
-        <li>
-            <a href="#">
-                Ticket Review
-                {% if ticket_review_count > 0 %}
-                <span class="badge text-bg-danger">{{ticket_review_count}}</span>
-                {% endif %}
-            </a>
-        </li>
-    </ul>
-
-    <ul class="navigation-right">
-        <li class="user-info">
-            {{ current_user.full_name }}
-            <small>{{ current_user.employee_status.value }}</small>
-        </li>
-    </ul>
-</nav>
-{% endblock navigation %}
-
-
-
-{% block content %}
+{% block mid_content %}
 <main class="container-xl page-content">
     <div class="row g-3">
 
@@ -144,9 +104,9 @@
         </div>
     </form>
 </div>
-{% endblock content %}
+{% endblock mid_content %}
 
-{% block scripts %}
+{% block mid_scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" defer></script>
 <script src="{{url_for('static', filename='js/charts.js')}}" defer></script>
-{% endblock scripts %}
+{% endblock mid_scripts %}
